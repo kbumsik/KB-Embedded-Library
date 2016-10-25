@@ -16,9 +16,8 @@ int main(void)
 
     // init peripherals for the LED display
     hcms_290x_init();
-    hcms_290x_clear();
 
-    hcms_290x_matrix("STR ");
+    hcms_290x_matrix("STRT");
     HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
     kb_timer_delay_ms(500);
     HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);

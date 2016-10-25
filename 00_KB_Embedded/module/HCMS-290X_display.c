@@ -5,9 +5,13 @@
 #include "HCMS-290X_display.h"
 #include <kb_timer.h>
 
-static const char fontTable[];
+static const uint8_t fontTable[];
 static SPI_HandleTypeDef spi_h_; 
 
+static inline void _SCK_set(int input)
+{
+	HAL_GPIO_WritePin(HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN, (GPIO_PinState)input);
+}
 static inline void _CE_set(int input)
 {
 	HAL_GPIO_WritePin(HCMS_290X_CE_PORT, HCMS_290X_CE_PIN, (GPIO_PinState)input);
@@ -46,26 +50,19 @@ static void _wake_up(uint8_t enable)
 
 static void _write_ctrl_reg(uint8_t data)
 {
+	// initial pin setting
 	_RS_set(1);	//select control register
 	kb_timer_delay_us(1);
 	_CE_set(0);	//enable data writing
 
-	// Fix it to just write 5 bytes
-	while (HAL_SPI_STATE_BUSY_TX == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
+	// write
 	HAL_SPI_Transmit(&spi_h_, &data, 1, 0);
-	while (HAL_SPI_STATE_BUSY_TX == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
-	while (HAL_SPI_STATE_BUSY == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
+
+	//end
 	kb_timer_delay_us(10);
 	_CE_set(1);   //latch on
+	uint8_t dummy = 0x00;
+	HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
 }
 
 void hcms_290x_init(void)
@@ -160,6 +157,8 @@ void hcms_290x_init(void)
 	kb_timer_delay_ms(10);
 	_RESET_set(1);
 
+	// clear the screen before waking up
+	hcms_290x_clear();
 	// wake up
 	_wake_up(1);
 }
@@ -167,34 +166,30 @@ void hcms_290x_init(void)
 void hcms_290x_matrix(char *s)
 {
 	int i, j;
+
+	// initial pin setting
 	uint8_t *ptr; //pointer for starting address of character s
 	_RS_set(0);	//select dot register
 	kb_timer_delay_us(1);
 	_CE_set(0);	//enable data writing
 
+	// write
 	for(i=0; i<4; i++)
 	{
-		ptr = &fontTable[s[i]*5];
+		ptr = (uint8_t *)(fontTable + s[i]*5);
 		for(j=0; j<5; j++)
 		{	// Fix it to just write 5 bytes
-			while (HAL_SPI_STATE_BUSY_TX == HAL_SPI_GetState(&spi_h_))
-			{
-				// wait until the SPI being finished
-			}
 			HAL_SPI_Transmit(&spi_h_, ptr, 1, 0);
 			ptr++;
 		}//for j
 	}//for i
-	while (HAL_SPI_STATE_BUSY_TX == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
-	while (HAL_SPI_STATE_BUSY == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
+
+	// end
 	kb_timer_delay_us(10);
-	_CE_set(1);   //latch on
+	_CE_set(1);
+	// We need to make falling edge to SCK pin to latch on
+	uint8_t dummy = 0x00;
+	HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
 }
 
 void hcms_290x_err(int err) {
@@ -248,32 +243,28 @@ void hcms_290x_clear(void)
 {
 	int i;
 	uint8_t dummy = 0x00;
+
+	// pin setup
 	_RS_set(0);	//select dot register
 	kb_timer_delay_us(1);
 	_CE_set(0);	//enable data writing
+
+	// write
 	for(i=0; i<20; i++)
 	{
-		while (HAL_SPI_STATE_BUSY_TX == HAL_SPI_GetState(&spi_h_))
-		{
-			// wait until the SPI being finished
-		}
 		HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
 	}
-	while (HAL_SPI_STATE_BUSY_TX == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
-	while (HAL_SPI_STATE_BUSY == HAL_SPI_GetState(&spi_h_))
-	{
-		// wait until the SPI being finished
-	}
+
+	// end
 	kb_timer_delay_us(10);
 	_CE_set(1);   //latch on
+	// We need to make falling edge to SCK pin to latch on
+	HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
 }
 
 
 
-static const char fontTable[] = {
+static const uint8_t fontTable[] = {
 	//0
 	0x80, 0x80, 0x80, 0x80, 0x80, // (space)
 	0x40, 0x40, 0x40, 0x40, 0x40, // (space)
