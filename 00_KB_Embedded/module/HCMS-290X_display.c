@@ -1,9 +1,8 @@
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_spi.h"
+#include "stm32f4xx.h"
 #include <stdio.h>
 
 #include "HCMS-290X_display.h"
-#include <kb_timer.h>
+#include "kb_timer.h"
 
 static const uint8_t fontTable[];
 static SPI_HandleTypeDef spi_h_; 

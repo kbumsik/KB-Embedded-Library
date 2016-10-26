@@ -40,6 +40,9 @@
 #define HCMS_290X_MOSI_GPIO_MODE	GPIO_AF7_SPI2
 #define HCMS_290X_SCK_GPIO_MODE		GPIO_AF5_SPI2
 
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 void hcms_290x_init(void);
 void hcms_290x_matrix(char *s);
