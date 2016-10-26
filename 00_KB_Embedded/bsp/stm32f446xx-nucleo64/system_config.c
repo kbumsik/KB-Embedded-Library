@@ -17,6 +17,7 @@
 #include "faults.h"
 #include "stm32f4xx_hal_def.h"
 #include "kb_timer.h"
+#include "kb_gpio.h"
 
 
 /**
@@ -148,37 +149,27 @@ void SystemClock_Config(void)
 */
 void peripheral_init(void)
 {
-
-	  GPIO_InitTypeDef GPIO_InitStruct;
-
-	  /* GPIO Ports Clock Enable */
-	  __HAL_RCC_GPIOC_CLK_ENABLE();
-	  __HAL_RCC_GPIOH_CLK_ENABLE();
-	  __HAL_RCC_GPIOA_CLK_ENABLE();
-	  __HAL_RCC_GPIOB_CLK_ENABLE();
+	  kb_gpio_init_t GPIO_InitStruct;
 
 	  /*Configure GPIO pin : B1_Pin */
-	  GPIO_InitStruct.Pin = B1_Pin;
 	  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
 	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+	  kb_gpio_init(B1_GPIO_Port, B1_Pin, &GPIO_InitStruct);
 
 	  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-	  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
 	  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	  GPIO_InitStruct.Pull = GPIO_NOPULL;
 	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-	  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	  kb_gpio_init(GPIOA, USART_TX_Pin|USART_RX_Pin, &GPIO_InitStruct);
 
-	  /*Configure GPIO pin : LD2_Pin */
-	  GPIO_InitStruct.Pin = LED1_Pin;
+	  /*Configure GPIO pin : LED1_Pin */
 	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	  GPIO_InitStruct.Pull = GPIO_NOPULL;
 	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+	  kb_gpio_init(LED1_GPIO_Port, LED1_Pin, &GPIO_InitStruct);
 
 	  /*Configure GPIO pin Output Level */
-	  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+	  kb_gpio_set(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 
 }

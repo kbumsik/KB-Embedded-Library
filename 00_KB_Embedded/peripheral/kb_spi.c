@@ -25,22 +25,26 @@ int kb_spi_init(kb_spi_t spi_num, kb_spi_polarity_t polarity)
 	if (spi_num == SPI1)
 	{
 		handler = &spi_1_h_;
-		spi_1_h_.Instance = SPI1;
+		__SPI1_CLK_ENABLE();
+		handler->Instance = SPI1;
 	}
 	else if (spi_num == SPI2)
 	{
 		handler = &spi_2_h_;
-		spi_1_h_.Instance = SPI2;
+		__SPI2_CLK_ENABLE();
+		handler->Instance = SPI2;
 	}
 	else if (spi_num == SPI3)
 	{
 		handler = &spi_3_h_;
-		spi_1_h_.Instance = SPI3;
+		__SPI3_CLK_ENABLE();
+		handler->Instance = SPI3;
 	}
 	else if (spi_num == SPI4)
 	{
 		handler = &spi_4_h_;
-		spi_1_h_.Instance = SPI4;
+		__SPI4_CLK_ENABLE();
+		handler->Instance = SPI4;
 	}
 	else
 	{
@@ -87,15 +91,15 @@ int kb_spi_mosi_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	{
 		return -1;
 	}
+	kb_gpio_enable_clk(port);
 	// Init GPIOs
-	GPIO_InitTypeDef gpio_setting = {
-		.Pin = pin,
+	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
 		.Pull = GPIO_PULLUP,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
-	HAL_GPIO_Init(port, &gpio_setting);
+	kb_gpio_init(port, pin, &gpio_setting);
 	return 0;
 }
 
@@ -106,15 +110,15 @@ int kb_spi_miso_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	{
 		return -1;
 	}
+	kb_gpio_enable_clk(port);
 	// Init GPIOs
-	GPIO_InitTypeDef gpio_setting = {
-		.Pin = pin,
+	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
 		.Pull = GPIO_PULLUP,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
-	HAL_GPIO_Init(port, &gpio_setting);
+	kb_gpio_init(port, pin, &gpio_setting);
 	return 0;
 }
 
@@ -125,22 +129,21 @@ int kb_spi_sck_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	{
 		return -1;
 	}
+	kb_gpio_enable_clk(port);
 	// Init GPIOs
-	GPIO_InitTypeDef gpio_setting = {
-		.Pin = pin,
+	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
 		.Pull = GPIO_PULLUP,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
-	HAL_GPIO_Init(port, &gpio_setting);
+	kb_gpio_init(port, pin, &gpio_setting);
 	return 0;
 }
 
 
 int kb_spi_send(kb_spi_t spi, uint8_t *buf, uint16_t size, uint32_t timeout)
 {
-
 	// select handler
 	SPI_HandleTypeDef* handler;
 	if (spi == SPI1)

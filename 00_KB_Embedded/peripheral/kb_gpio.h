@@ -17,39 +17,21 @@
 	#error "Please define device driver (e.g. USE_HAL_DRIVER)\n"
 #endif
 
-/* TODO: Think of a good design for GPIO
-typedef enum{
-	INPUT,
-	OUTPUT,
-	OUTPUT_OPENDRAIN,
-	ALT,
-	ALT_OPENDRAIN
-}kb_gpio_mode_t;
+/* TODO: Think of a good design for GPIO */
+typedef GPIO_InitTypeDef kb_gpio_init_t;
+typedef GPIO_PinState kb_gpio_state_t;
 
-typedef enum{
-	NOPULL,
-	PULLUP,
-	PULLDOWN
-}kb_gpio_pull_t;
-
-typedef enum{
-	LOW,
-	HIGH
-}kb_gpio_state_t;
-*/
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-/*
-int kb_gpio_mode(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_mode_t mode);
-int kb_gpio_pull(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull);
-int kb_gpio_alternate(kb_gpio_port_t port, kb_gpio_pin_t pin, uint32_t alternate); // TODO: More general solution
-
+void kb_gpio_init(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init);
 kb_gpio_state_t kb_gpio_read(kb_gpio_port_t port, kb_gpio_pin_t pin);
-int kb_gpio_set(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_state_t high_low);
-int kb_gpio_toggle(kb_gpio_port_t port, kb_gpio_pin_t pin);
-*/
+void kb_gpio_set(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_state_t state);
+void kb_gpio_toggle(kb_gpio_port_t port, kb_gpio_pin_t pin);
+
+void kb_gpio_enable_clk(kb_gpio_port_t port);
+
 #ifdef __cplusplus
 }
 #endif

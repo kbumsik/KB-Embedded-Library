@@ -3,29 +3,29 @@
 
 #include "HCMS-290X_display.h"
 #include "kb_timer.h"
+#include "kb_spi.h"
 
 static const uint8_t fontTable[];
-static SPI_HandleTypeDef spi_h_; 
 
 static inline void _SCK_set(int input)
 {
-	HAL_GPIO_WritePin(HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN, (GPIO_PinState)input);
+	kb_gpio_set(HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN, (kb_gpio_state_t)input);
 }
 static inline void _CE_set(int input)
 {
-	HAL_GPIO_WritePin(HCMS_290X_CE_PORT, HCMS_290X_CE_PIN, (GPIO_PinState)input);
+	kb_gpio_set(HCMS_290X_CE_PORT, HCMS_290X_CE_PIN, (kb_gpio_state_t)input);
 }
 static inline void _RS_set(int input)
 {
-	HAL_GPIO_WritePin(HCMS_290X_RS_PORT, HCMS_290X_RS_PIN, (GPIO_PinState)input);
+	kb_gpio_set(HCMS_290X_RS_PORT, HCMS_290X_RS_PIN, (kb_gpio_state_t)input);
 }
 static inline void _RESET_set(int input)
 {
-	HAL_GPIO_WritePin(HCMS_290X_RESET_PORT, HCMS_290X_RESET_PIN, (GPIO_PinState)input);
+	kb_gpio_set(HCMS_290X_RESET_PORT, HCMS_290X_RESET_PIN, (kb_gpio_state_t)input);
 }
 
 static void _wake_up(uint8_t enable);
-//static void _set_brightness(uint8_t brightness);
+//static void _set_brightness(uint8_t brightness);	// TODO: implement brightness
 static void _write_ctrl_reg(uint8_t data);
 
 /****************************************************************/
@@ -55,72 +55,47 @@ static void _write_ctrl_reg(uint8_t data)
 	_CE_set(0);	//enable data writing
 
 	// write
-	HAL_SPI_Transmit(&spi_h_, &data, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &data, 1, 0);
 
 	//end
 	kb_timer_delay_us(10);
 	_CE_set(1);   //latch on
 	uint8_t dummy = 0x00;
-	HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
 }
 
 void hcms_290x_init(void)
 {
-	// Clock enables.
-	HCMS_290X_SPI_CLK_ENABLE();
-	HCMS_290X_RS_CLK_ENABLE();
-	HCMS_290X_RESET_CLK_ENABLE();
-	HCMS_290X_CE_CLK_ENABLE();
-	HCMS_290X_MOSI_CLK_ENABLE();
-	HCMS_290X_SCK_CLK_ENABLE();
-
 	// Init GPIOs
-	// MOSI pin
-	GPIO_InitTypeDef gpio_setting = {
-		.Pin = HCMS_290X_MOSI_PIN,
-		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_PULLUP,
-		.Alternate = HCMS_290X_MOSI_GPIO_MODE,
-		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
-	};
-	HAL_GPIO_Init(HCMS_290X_MOSI_PORT, &gpio_setting);
-
-	// SCK pin
-	gpio_setting = (GPIO_InitTypeDef){
-		.Pin = HCMS_290X_SCK_PIN,
-		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_PULLUP,
-		.Alternate = HCMS_290X_SCK_GPIO_MODE,
-		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
-	};
-	HAL_GPIO_Init(HCMS_290X_SCK_PORT, &gpio_setting);
-
 	//  CE PIN
-	gpio_setting = (GPIO_InitTypeDef){
-		.Pin = HCMS_290X_CE_PIN,
+	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_OUTPUT_PP,
 		.Pull = GPIO_PULLDOWN,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
-	HAL_GPIO_Init(HCMS_290X_CE_PORT, &gpio_setting);
+	kb_gpio_init(HCMS_290X_CE_PORT, HCMS_290X_CE_PIN, &gpio_setting);
 
 	// RS pin
-	gpio_setting = (GPIO_InitTypeDef){
-		.Pin = HCMS_290X_RS_PIN,
+	gpio_setting = (kb_gpio_init_t ){
 		.Mode = GPIO_MODE_OUTPUT_PP,
 		.Pull = GPIO_NOPULL,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
-	HAL_GPIO_Init(HCMS_290X_RS_PORT, &gpio_setting);
+	kb_gpio_init(HCMS_290X_RS_PORT, HCMS_290X_RS_PIN, &gpio_setting);
 
 	// RESET pin
-	gpio_setting = (GPIO_InitTypeDef){
-		.Pin = HCMS_290X_RESET_PIN,
+	gpio_setting = (kb_gpio_init_t){
 		.Mode = GPIO_MODE_OUTPUT_PP,
 		.Pull = GPIO_NOPULL,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
-	HAL_GPIO_Init(HCMS_290X_RESET_PORT, &gpio_setting);
+	kb_gpio_init(HCMS_290X_RESET_PORT, HCMS_290X_RESET_PIN, &gpio_setting);
+
+	// MOSI pin
+	kb_spi_mosi_init(HCMS_290X_SPI, HCMS_290X_MOSI_PORT, HCMS_290X_MOSI_PIN);
+
+	// SCK pin
+	kb_spi_sck_init(HCMS_290X_SPI, HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN);
 
 	// then init SPI.
 	/*
@@ -130,21 +105,8 @@ void hcms_290x_init(void)
 	 * Fclk = 5MHz at Vlogic = 5V, 4MHz at Vlogic = 3V.
 	 * Our project uses 5V for Vlogic.
 	 */
-	spi_h_ = (SPI_HandleTypeDef){
-		.Instance = HCMS_290X_SPI,
-		.Init.Mode = SPI_MODE_MASTER,
-		.Init.Direction = SPI_DIRECTION_1LINE, // We only send 1 TX line
-		.Init.DataSize = SPI_DATASIZE_8BIT,
-		.Init.CLKPolarity = SPI_POLARITY_HIGH,
-		.Init.CLKPhase = SPI_PHASE_2EDGE,
-		.Init.NSS = SPI_NSS_SOFT,			// No hardware NSS pin
-		.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16,
-		.Init.FirstBit = SPI_FIRSTBIT_MSB,
-		.Init.TIMode = SPI_TIMODE_DISABLED,
-		.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED,
-		.Init.CRCPolynomial = 7
-	};
-	HAL_SPI_Init(&spi_h_);
+	kb_spi_init(HCMS_290X_SPI, TRAILING_RISING_EDGE);	// TODO: frequency setting
+	// it was originally SPI_BAUDRATEPRESCALER_16
 
 	// set pins
 	_RESET_set(1);
@@ -178,7 +140,7 @@ void hcms_290x_matrix(char *s)
 		ptr = (uint8_t *)(fontTable + s[i]*5);
 		for(j=0; j<5; j++)
 		{	// Fix it to just write 5 bytes
-			HAL_SPI_Transmit(&spi_h_, ptr, 1, 0);
+			kb_spi_send(HCMS_290X_SPI, ptr, 1, 0);
 			ptr++;
 		}//for j
 	}//for i
@@ -188,7 +150,7 @@ void hcms_290x_matrix(char *s)
 	_CE_set(1);
 	// We need to make falling edge to SCK pin to latch on
 	uint8_t dummy = 0x00;
-	HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
 }
 
 void hcms_290x_err(int err) {
@@ -251,14 +213,14 @@ void hcms_290x_clear(void)
 	// write
 	for(i=0; i<20; i++)
 	{
-		HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
+		kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
 	}
 
 	// end
 	kb_timer_delay_us(10);
 	_CE_set(1);   //latch on
 	// We need to make falling edge to SCK pin to latch on
-	HAL_SPI_Transmit(&spi_h_, &dummy, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
 }
 
 

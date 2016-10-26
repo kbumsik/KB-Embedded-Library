@@ -5,6 +5,7 @@
 #include "trace.h"
 #include "kb_timer.h"
 #include "HCMS-290X_display.h"
+#include "kb_gpio.h"
 
 int main(void)
 {
@@ -18,14 +19,14 @@ int main(void)
     hcms_290x_init();
 
     hcms_290x_matrix("STRT");
-    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    kb_gpio_toggle(LED1_GPIO_Port, LED1_Pin);
     kb_timer_delay_ms(500);
-    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    kb_gpio_toggle(LED1_GPIO_Port, LED1_Pin);
     trace_puts("Hello ARM World!");
     uint32_t seconds = 0;
     while (1)
     {
-    	HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+    	kb_gpio_toggle(LED1_GPIO_Port, LED1_Pin);
     	kb_timer_delay_us(1000000);
 
         ++seconds;

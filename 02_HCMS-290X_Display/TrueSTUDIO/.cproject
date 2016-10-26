@@ -36,7 +36,9 @@
 									<listOptionValue builtIn="false" value="STM32F446xx"/>
 									<listOptionValue builtIn="false" value="USE_FULL_ASSERT"/>
 								</option>
-								<option id="com.atollic.truestudio.as.general.incpath.303638040" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" valueType="includePath"/>
+								<option id="com.atollic.truestudio.as.general.incpath.303638040" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
+								</option>
 								<inputType id="com.atollic.truestudio.as.input.273808860" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.754278893" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
@@ -55,6 +57,7 @@
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/system"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/bsp/stm32f446xx-nucleo64"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/module"/>
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.18338362" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1617601037" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F446RE" valueType="enumerated"/>
@@ -95,6 +98,7 @@
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/system"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/bsp/stm32f446xx-nucleo64"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/module"/>
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.2081609160" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1910215133" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F446RE" valueType="enumerated"/>
@@ -161,7 +165,9 @@
 								<option id="com.atollic.truestudio.as.symbols.defined.857398487" name="Defined symbols" superClass="com.atollic.truestudio.as.symbols.defined" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="USE_FULL_ASSERT"/>
 								</option>
-								<option id="com.atollic.truestudio.as.general.incpath.5301948" name="Include path" superClass="com.atollic.truestudio.as.general.incpath"/>
+								<option id="com.atollic.truestudio.as.general.incpath.5301948" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
+								</option>
 								<inputType id="com.atollic.truestudio.as.input.182668771" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.gcc.577937809" name="C Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gcc">
@@ -174,6 +180,7 @@
 									<listOptionValue builtIn="false" value="..\Drivers\CMSIS\Include"/>
 									<listOptionValue builtIn="false" value="..\Drivers\CMSIS\Device\ST\STM32F4xx\Include"/>
 									<listOptionValue builtIn="false" value="..\Drivers\STM32F4xx_HAL_Driver\Inc"/>
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.931041979" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1795735156" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F446RE" valueType="enumerated"/>
@@ -208,6 +215,7 @@
 									<listOptionValue builtIn="false" value="..\Drivers\CMSIS\Include"/>
 									<listOptionValue builtIn="false" value="..\Drivers\CMSIS\Device\ST\STM32F4xx\Include"/>
 									<listOptionValue builtIn="false" value="..\Drivers\STM32F4xx_HAL_Driver\Inc"/>
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.811783206" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1439914277" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F446RE" valueType="enumerated"/>
@@ -247,7 +255,14 @@
 		<project id="02_HCMS-290X_Display.com.atollic.truestudio.exe.1019352514" name="Executable" projectType="com.atollic.truestudio.exe"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/02_HCMS-290X_Display"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/02_HCMS-290X_Display"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.configuration.release.1417318178;com.atollic.truestudio.configuration.release.1417318178.;com.atollic.truestudio.exe.release.toolchain.gcc.577937809;com.atollic.truestudio.gcc.input.340860934">
