@@ -18,29 +18,31 @@
 	#error "Please define device! " __FILE__ "\n"
 #endif
 
-int kb_spi_init(kb_spi_t spi_num, kb_spi_polarity_t polarity)
+static uint32_t get_bus_freq_(kb_spi_t spi);
+
+int kb_spi_init(kb_spi_t spi, kb_spi_polarity_t polarity)
 {
 	// select handler
 	SPI_HandleTypeDef* handler;
-	if (spi_num == SPI1)
+	if (spi == SPI1)
 	{
 		handler = &spi_1_h_;
 		__SPI1_CLK_ENABLE();
 		handler->Instance = SPI1;
 	}
-	else if (spi_num == SPI2)
+	else if (spi == SPI2)
 	{
 		handler = &spi_2_h_;
 		__SPI2_CLK_ENABLE();
 		handler->Instance = SPI2;
 	}
-	else if (spi_num == SPI3)
+	else if (spi == SPI3)
 	{
 		handler = &spi_3_h_;
 		__SPI3_CLK_ENABLE();
 		handler->Instance = SPI3;
 	}
-	else if (spi_num == SPI4)
+	else if (spi == SPI4)
 	{
 		handler = &spi_4_h_;
 		__SPI4_CLK_ENABLE();
@@ -84,9 +86,10 @@ int kb_spi_init(kb_spi_t spi_num, kb_spi_polarity_t polarity)
 	}
 	return HAL_SPI_Init(handler);
 }
-int kb_spi_mosi_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
+
+int kb_spi_mosi_init(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 {
-	uint32_t alternate = GPIO_SPI_MOSI_AF_(spi_num, port, pin);
+	uint32_t alternate = GPIO_SPI_MOSI_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
 		return -1;
@@ -103,9 +106,9 @@ int kb_spi_mosi_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	return 0;
 }
 
-int kb_spi_miso_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_spi_miso_init(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 {
-	uint32_t alternate = GPIO_SPI_MISO_AF_(spi_num, port, pin);
+	uint32_t alternate = GPIO_SPI_MISO_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
 		return -1;
@@ -122,9 +125,9 @@ int kb_spi_miso_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	return 0;
 }
 
-int kb_spi_sck_init(kb_spi_t spi_num, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_spi_sck_init(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 {
-	uint32_t alternate = GPIO_SPI_SCK_AF_(spi_num, port, pin);
+	uint32_t alternate = GPIO_SPI_SCK_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
 		return -1;
@@ -167,4 +170,18 @@ int kb_spi_send(kb_spi_t spi, uint8_t *buf, uint16_t size, uint32_t timeout)
 		return -1;
 	}
 	return HAL_SPI_Transmit(handler, buf, size, 0);
+}
+
+
+static uint32_t get_bus_freq_(kb_spi_t spi)
+{
+	if ((spi == SPI2) || (spi == SPI3))
+	{	// APB1: SPI2, SPI3
+		return HAL_RCC_GetPCLK1Freq();
+	}
+	else if ((spi == SPI1) || (spi == SPI4))
+	{	// APB2: SPI1, SPI4
+		return HAL_RCC_GetPCLK2Freq();
+	}
+	return 0;
 }

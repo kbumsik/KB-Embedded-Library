@@ -1,0 +1,18 @@
+/*
+ * module_config.h
+ *
+ *  Created on: Oct 26, 2016
+ *      Author: Bumsik Kim
+ */
+
+#ifndef BSP_STM32F446XX_NUCLEO64_KB_MODULE_CONFIG_H_
+#define BSP_STM32F446XX_NUCLEO64_KB_MODULE_CONFIG_H_
+
+#define TERMINAL_UART			USART2
+#define TERMINAL_BAUD_RATE		9600 // or 115200
+#define TERMINAL_TX_Pin 		GPIO_PIN_2
+#define TERMINAL_TX_GPIO_Port 	GPIOA
+#define TERMINAL_RX_Pin 		GPIO_PIN_3
+#define TERMINAL_RX_GPIO_Port 	GPIOA
+
+#endif /* BSP_STM32F446XX_NUCLEO64_KB_MODULE_CONFIG_H_ */

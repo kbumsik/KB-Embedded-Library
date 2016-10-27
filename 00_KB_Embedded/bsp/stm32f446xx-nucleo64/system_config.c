@@ -17,7 +17,6 @@
 #include "faults.h"
 #include "stm32f4xx_hal_def.h"
 #include "kb_timer.h"
-#include "kb_gpio.h"
 
 
 /**
@@ -147,6 +146,8 @@ void SystemClock_Config(void)
      PA2   ------> USART2_TX
      PA3   ------> USART2_RX
 */
+#include "kb_gpio.h"
+#include "kb_terminal.h"
 void peripheral_init(void)
 {
 	  kb_gpio_init_t GPIO_InitStruct;
@@ -156,12 +157,8 @@ void peripheral_init(void)
 	  GPIO_InitStruct.Pull = GPIO_NOPULL;
 	  kb_gpio_init(B1_GPIO_Port, B1_Pin, &GPIO_InitStruct);
 
-	  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-	  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-	  kb_gpio_init(GPIOA, USART_TX_Pin|USART_RX_Pin, &GPIO_InitStruct);
+	  /*Configure UART */
+	  kb_terminal_init();
 
 	  /*Configure GPIO pin : LED1_Pin */
 	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

@@ -1,7 +1,7 @@
+#include <kb_HCMS-290X_display.h>
 #include "stm32f4xx.h"
 #include <stdio.h>
 
-#include "HCMS-290X_display.h"
 #include "kb_timer.h"
 #include "kb_spi.h"
 
