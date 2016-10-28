@@ -6,7 +6,6 @@
  */
 
 #include "kb_gpio.h"
-#include "stm32f4xx.h"
 
 void kb_gpio_init(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init)
 {

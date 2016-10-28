@@ -8,9 +8,9 @@
 #ifndef PERIPHERAL_KB_GPIO_H_
 #define PERIPHERAL_KB_GPIO_H_
 
-#include "stm32f4xx.h"
+#include "kb_base.h"
 
-#if defined(USE_HAL_DRIVER) // stm32 driver
+#if defined(STM32)
 	typedef GPIO_TypeDef* 	kb_gpio_port_t;
 	typedef uint16_t 		kb_gpio_pin_t;
 #else

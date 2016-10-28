@@ -7,8 +7,6 @@
 
 #include "kb_uart.h"
 #include "kb_alternate_pins.h"
-#include "stm32f4xx.h"
-#include "kb_timer.h"
 #include <string.h>
 
 #if defined(STM32F446xx)

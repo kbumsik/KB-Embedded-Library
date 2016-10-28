@@ -1,9 +1,9 @@
-#include <kb_HCMS-290X_display.h>
-#include "stm32f4xx.h"
+#include "kb_HCMS-290X_display.h"
+#include "kb_base.h"
+#include "kb_spi.h"
+#include "kb_tick.h"
 #include <stdio.h>
 
-#include "kb_timer.h"
-#include "kb_spi.h"
 
 static const uint8_t fontTable[];
 
@@ -51,14 +51,14 @@ static void _write_ctrl_reg(uint8_t data)
 {
 	// initial pin setting
 	_RS_set(1);	//select control register
-	kb_timer_delay_us(1);
+	kb_delay_us(1);
 	_CE_set(0);	//enable data writing
 
 	// write
 	kb_spi_send(HCMS_290X_SPI, &data, 1, 0);
 
 	//end
-	kb_timer_delay_us(10);
+	kb_delay_us(10);
 	_CE_set(1);   //latch on
 	uint8_t dummy = 0x00;
 	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
@@ -105,7 +105,11 @@ void hcms_290x_init(void)
 	 * Fclk = 5MHz at Vlogic = 5V, 4MHz at Vlogic = 3V.
 	 * Our project uses 5V for Vlogic.
 	 */
-	kb_spi_init(HCMS_290X_SPI, TRAILING_RISING_EDGE);	// TODO: frequency setting
+	kb_spi_init_t spi_init = {
+			.polarity = TRAILING_RISING_EDGE,
+			.frequency = 4000000
+	};
+	kb_spi_init(HCMS_290X_SPI, &spi_init);	// TODO: frequency setting
 	// it was originally SPI_BAUDRATEPRESCALER_16
 
 	// set pins
@@ -115,7 +119,7 @@ void hcms_290x_init(void)
 
 	// Reset device
 	_RESET_set(0);
-	kb_timer_delay_ms(10);
+	kb_delay_ms(10);
 	_RESET_set(1);
 
 	// clear the screen before waking up
@@ -131,7 +135,7 @@ void hcms_290x_matrix(char *s)
 	// initial pin setting
 	uint8_t *ptr; //pointer for starting address of character s
 	_RS_set(0);	//select dot register
-	kb_timer_delay_us(1);
+	kb_delay_us(1);
 	_CE_set(0);	//enable data writing
 
 	// write
@@ -140,13 +144,13 @@ void hcms_290x_matrix(char *s)
 		ptr = (uint8_t *)(fontTable + s[i]*5);
 		for(j=0; j<5; j++)
 		{	// Fix it to just write 5 bytes
-			kb_spi_send(HCMS_290X_SPI, ptr, 1, 0);
+			kb_spi_send(HCMS_290X_SPI, ptr, 1, TIMEOUT_MAX);
 			ptr++;
 		}//for j
 	}//for i
 
 	// end
-	kb_timer_delay_us(10);
+	kb_delay_us(10);
 	_CE_set(1);
 	// We need to make falling edge to SCK pin to latch on
 	uint8_t dummy = 0x00;
@@ -190,7 +194,7 @@ void hcms_290x_matrix_scroll(char* str) {
 	i = 0;
 	while(str[i+3] != '\0') {
 		hcms_290x_matrix(&str[i]);
-		kb_timer_delay_ms(1000);
+		kb_delay_ms(1000);
 		i++;
 	}
 }
@@ -207,7 +211,7 @@ void hcms_290x_clear(void)
 
 	// pin setup
 	_RS_set(0);	//select dot register
-	kb_timer_delay_us(1);
+	kb_delay_us(1);
 	_CE_set(0);	//enable data writing
 
 	// write
@@ -217,7 +221,7 @@ void hcms_290x_clear(void)
 	}
 
 	// end
-	kb_timer_delay_us(10);
+	kb_delay_us(10);
 	_CE_set(1);   //latch on
 	// We need to make falling edge to SCK pin to latch on
 	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);

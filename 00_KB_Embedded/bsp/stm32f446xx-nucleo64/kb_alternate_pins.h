@@ -8,9 +8,11 @@
 #ifndef BSP_STM32F446XX_NUCLEO64_KB_ALTERNATE_PINS_H_
 #define BSP_STM32F446XX_NUCLEO64_KB_ALTERNATE_PINS_H_
 
-#include "stm32f4xx.h"
+#include "kb_base.h"
 
 #define KB_WRONG_PIN	0xFFU
+
+#if defined(STM32F446xx)
 
 /******************************************************************************
  * SPI
@@ -227,5 +229,6 @@
 							(port == GPIOG && pin == GPIO_PIN_9))) \
 							)
 
+#endif /* STM32F446xx */
 
 #endif /* BSP_STM32F446XX_NUCLEO64_KB_ALTERNATE_PINS_H_ */

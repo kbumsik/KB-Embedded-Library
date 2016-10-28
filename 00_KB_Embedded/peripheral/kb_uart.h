@@ -9,10 +9,10 @@
 #define PERIPHERAL_KB_UART_H_
 
 /* Includes */
+#include "kb_base.h"
 #include "kb_gpio.h"
-#include "stm32f4xx.h"
 
-#if defined(USE_HAL_DRIVER)
+#if defined(STM32)
 	typedef USART_TypeDef* kb_uart_t;
 #else
 	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"

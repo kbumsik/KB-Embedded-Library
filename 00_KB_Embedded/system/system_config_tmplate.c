@@ -5,11 +5,10 @@
  *      Author: Bumsik Kim
  */
 
-#include "stm32f4xx_hal.h"
+#include "kb_base.h"
+#include "kb_tick.h"
 #include "system_config.h"
 #include "faults.h"
-#include "stm32f4xx_hal_def.h"
-#include "kb_timer.h"
 
 
 /**
@@ -58,7 +57,7 @@ __weak void system_init(void)
 	  enable_faults();
 
 	  // init timer
-	  kb_timer_init();
+	  kb_tick_init();
 }
 
 

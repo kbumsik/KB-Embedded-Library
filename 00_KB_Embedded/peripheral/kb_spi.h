@@ -8,10 +8,10 @@
 #ifndef PERIPHERAL_KB_SPI_H_
 #define PERIPHERAL_KB_SPI_H_
 
+#include "kb_base.h"
 #include "kb_gpio.h"
-#include "stm32f4xx.h"
 
-#if defined(USE_HAL_DRIVER)
+#if defined(STM32)
 	typedef SPI_TypeDef* kb_spi_t;
 #else
 	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
@@ -24,11 +24,16 @@ typedef enum{
 	TRAILING_FALLING_EDGE = 0x04,
 }kb_spi_polarity_t;
 
+typedef struct{
+	uint32_t	frequency;
+	kb_spi_polarity_t polarity;
+}kb_spi_init_t;
+
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-int kb_spi_init(kb_spi_t spi, kb_spi_polarity_t polarity);
+int kb_spi_init(kb_spi_t spi, kb_spi_init_t *settings);
 int kb_spi_mosi_init(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin);
 int kb_spi_miso_init(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin);
 int kb_spi_sck_init(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin);

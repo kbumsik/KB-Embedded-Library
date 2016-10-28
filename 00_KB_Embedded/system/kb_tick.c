@@ -4,9 +4,11 @@
  *  Created on: Jan 7, 2016
  *      Author: Bumsik Kim
  */
-#include "kb_timer.h"
 
-#ifndef USE_HAL_DRIVER
+#include "kb_base.h"
+#include "kb_tick.h"
+
+#ifndef STM32
 static volatile uint32_t ms_;
 static void set_ms_(volatile uint32_t ms);
 
@@ -36,7 +38,7 @@ void kb_timer_inc_ms(void)
  * @brief get current time in milliseconds
  * @return current time in milliseconds.
  */
-uint32_t kb_timer_get_ms(void)
+uint32_t kb_tick_ms(void)
 {
 	return ms_;
 }
@@ -47,8 +49,8 @@ uint32_t kb_timer_get_ms(void)
  */
 void kb_timer_delay_ms(volatile uint32_t delay_ms)
 {
-	uint32_t current = kb_timer_get_ms();
-	while ((kb_timer_get_ms() - current) < delay_ms)
+	uint32_t current = kb_tick_ms();
+	while ((kb_tick_ms() - current) < delay_ms)
 	{
 	}
 }
@@ -58,12 +60,12 @@ void kb_timer_delay_ms(volatile uint32_t delay_ms)
  * @brief get current time in microseconds
  * @return current time in microseconds
  */
-uint32_t kb_timer_get_us(void)
+uint32_t kb_tick_us(void)
 {
 	uint32_t tmp_ms;
 	volatile uint32_t micros;
 	/* TODO: must be shorten by getting SystemCoreClock */
-	tmp_ms = kb_timer_get_ms();
+	tmp_ms = kb_tick_ms();
 	micros = 1000 - SysTick->VAL/F_CPU_MHZ;
 	micros += tmp_ms*1000;
 	// Millis*1000+(SystemCoreClock/1000-SysTick->VAL)/F_CPU_MHZ;
@@ -75,14 +77,14 @@ uint32_t kb_timer_get_us(void)
  * @param uwInput   time to delay in microseconds
  * @warning Might not accurate depends on compiler code compression rate and clock rate of the MCU.
  */
-void kb_timer_delay_us(volatile uint32_t delay_us)
+void kb_delay_us(volatile uint32_t delay_us)
 {
-	uint32_t start = kb_timer_get_us();
+	uint32_t start = kb_tick_us();
 	uint32_t current = start;
 	// FIXME: sometimes the current is lower than start. Why?
 	while ((current- start) < delay_us || (current < start))
 	{
-		current = kb_timer_get_us();
+		current = kb_tick_us();
 	}
 	return;
 }

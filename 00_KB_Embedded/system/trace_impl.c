@@ -7,8 +7,8 @@
 
 #if defined(TRACE)
 
-#include "stm32f4xx.h"
-#include "Trace.h"
+#include "kb_base.h"
+#include "trace.h"
 
 // ----------------------------------------------------------------------------
 

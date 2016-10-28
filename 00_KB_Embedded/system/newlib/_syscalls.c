@@ -62,6 +62,12 @@ char** environ = __env;
 // Forward declarations
 
 int
+_read(int file, char* ptr, int len);
+
+int
+_write(int file, char* ptr, int len);
+
+int
 _chown(const char* path, uid_t owner, gid_t group);
 
 int
@@ -98,9 +104,6 @@ int
 _open(char* file, int flags, int mode);
 
 int
-_read(int file, char* ptr, int len);
-
-int
 _readlink(const char* path, char* buf, size_t bufsize);
 
 int
@@ -118,10 +121,22 @@ _unlink(char* name);
 int
 _wait(int* status);
 
-int
-_write(int file, char* ptr, int len);
-
 // Definitions
+int __attribute__((weak))
+_read(int file __attribute__((unused)), char* ptr __attribute__((unused)),
+    int len __attribute__((unused)))
+{
+  errno = ENOSYS;
+  return -1;
+}
+
+int __attribute__((weak))
+_write(int file __attribute__((unused)), char* ptr __attribute__((unused)),
+    int len __attribute__((unused)))
+{
+  errno = ENOSYS;
+  return -1;
+}
 
 int __attribute__((weak))
 _chown(const char* path __attribute__((unused)),
@@ -215,14 +230,6 @@ _open(char* file __attribute__((unused)), int flags __attribute__((unused)),
 }
 
 int __attribute__((weak))
-_read(int file __attribute__((unused)), char* ptr __attribute__((unused)),
-    int len __attribute__((unused)))
-{
-  errno = ENOSYS;
-  return -1;
-}
-
-int __attribute__((weak))
 _readlink(const char* path __attribute__((unused)),
     char* buf __attribute__((unused)), size_t bufsize __attribute__((unused)))
 {
@@ -267,13 +274,6 @@ _wait(int* status __attribute__((unused)))
   return -1;
 }
 
-int __attribute__((weak))
-_write(int file __attribute__((unused)), char* ptr __attribute__((unused)),
-    int len __attribute__((unused)))
-{
-  errno = ENOSYS;
-  return -1;
-}
 
 // ----------------------------------------------------------------------------
 

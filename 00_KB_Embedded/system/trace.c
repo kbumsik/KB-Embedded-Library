@@ -7,12 +7,11 @@
 
 #if defined(TRACE)
 
+#include "kb_base.h"
+#include "trace.h"
 #include <stdio.h>
 #include <stdarg.h>
-#include "trace.h"
-#include "string.h"
-#include "stm32f4xx.h"
-
+#include <string.h>
 #ifndef OS_INTEGER_TRACE_PRINTF_TMP_ARRAY_SIZE
 #define OS_INTEGER_TRACE_PRINTF_TMP_ARRAY_SIZE (128)
 #endif
