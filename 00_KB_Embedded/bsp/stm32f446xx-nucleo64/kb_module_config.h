@@ -8,6 +8,14 @@
 #ifndef BSP_STM32F446XX_NUCLEO64_KB_MODULE_CONFIG_H_
 #define BSP_STM32F446XX_NUCLEO64_KB_MODULE_CONFIG_H_
 
+// Push button settings
+#define B1_Pin 				GPIO_PIN_13
+#define B1_GPIO_Port 		GPIOC
+
+// LED1 settings
+#define LED1_Pin GPIO_PIN_5		//LD2
+#define LED1_GPIO_Port GPIOA
+
 // Terminal settings
 #define TERMINAL_UART			USART2
 #define TERMINAL_BAUD_RATE		9600 // or 115200

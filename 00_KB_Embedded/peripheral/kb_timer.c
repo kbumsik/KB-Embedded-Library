@@ -7,6 +7,7 @@
 
 #include "kb_base.h"
 #include "kb_timer.h"
+#include "kb_alternate_pins.h"
 
 // base name change. Used with kb_msg(). See @kb_base.h
 #ifdef KB_MSG_BASE
@@ -38,9 +39,42 @@ static void enable_timer_clk_ (kb_timer_t timer);
 #endif
 
 
-int kb_timer_ch_pin(kb_timer_t timer, uint32_t baud_rate)
+int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port, kb_gpio_pin_t pin)
 {
-
+	uint32_t alternate;
+	switch (channel)
+	{
+	case CH_1:
+		alternate = GPIO_TIM_CH1_AF_(timer, port, pin);
+		break;
+	case CH_2:
+		alternate = GPIO_TIM_CH2_AF_(timer, port, pin);
+		break;
+	case CH_3:
+		alternate = GPIO_TIM_CH3_AF_(timer, port, pin);
+		break;
+	case CH_4:
+		alternate = GPIO_TIM_CH4_AF_(timer, port, pin);
+		break;
+	default:
+		kb_error("Choose correct channel!\r\n");
+		return KB_ERROR;
+	}
+	if (alternate == KB_WRONG_PIN)
+	{
+		kb_error("Wrong MOSI pin! Find a correct one.\r\n");
+		return KB_ERROR;
+	}
+	kb_gpio_enable_clk(port);
+	// Init GPIOs
+	kb_gpio_init_t gpio_setting = {
+		.Mode = GPIO_MODE_AF_PP,
+		.Pull = GPIO_NOPULL,
+		.Alternate = alternate,
+		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
+	};
+	kb_gpio_init(port, pin, &gpio_setting);
+	return KB_OK;
 }
 
 
@@ -79,7 +113,10 @@ int kb_pwm_init(kb_timer_t timer, kb_timer_init_t *settings)
 			freq = (get_bus_freq_(timer)>>1)/(handler->Init.Prescaler + 1);
 		}
 	}
-	kb_msg("Selected freq: %lu\r\n", freq);
+	kb_msg("Requested clock freq: %lu\r\n", settings->clock_frequency);
+	kb_msg("Requested pluse freq: %lu\r\n", settings->clock_frequency/settings->period);
+	kb_msg("Selected clock freq: %lu\r\n", freq);
+	kb_msg("Selected pulse freq: %lu\r\n", freq/handler->Init.Period);
 	// good to go
 	kb_status_t status = HAL_TIM_PWM_Init(handler);
 	if(KB_OK != status)
@@ -90,13 +127,13 @@ int kb_pwm_init(kb_timer_t timer, kb_timer_init_t *settings)
 }
 
 
-int kb_pwm_ch_set_percent(kb_timer_t timer, kb_timer_ch_t channel, uint8_t	duty_cycle_percent)
+int kb_pwm_percent(kb_timer_t timer, kb_timer_ch_t channel, uint8_t	duty_cycle_percent)
 {
-	return kb_pwm_ch_set_permyriad(timer, channel, duty_cycle_percent * 100);
+	return kb_pwm_permyriad(timer, channel, duty_cycle_percent * 100);
 }
 
 
-int kb_pwm_ch_set_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t duty_cycle_permyriad) // 1 permyriad = 0.01%. 100 permyriad = 1%. max 10000 permyriad
+int kb_pwm_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t duty_cycle_permyriad) // 1 permyriad = 0.01%. 100 permyriad = 1%. max 10000 permyriad
 {
 	// select handler
 	TIM_HandleTypeDef* handler = get_handler(timer);
@@ -132,7 +169,7 @@ int kb_pwm_ch_set_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t du
 }
 
 
-int kb_pwm_ch_start(kb_timer_t timer, kb_timer_ch_t channel)
+int kb_pwm_start(kb_timer_t timer, kb_timer_ch_t channel)
 {
 	// get handler and enable timer
 	TIM_HandleTypeDef* handler = get_handler(timer);
@@ -150,7 +187,7 @@ int kb_pwm_ch_start(kb_timer_t timer, kb_timer_ch_t channel)
 }
 
 
-int kb_pwm_ch_stop(kb_timer_t timer, kb_timer_ch_t channel)
+int kb_pwm_stop(kb_timer_t timer, kb_timer_ch_t channel)
 {
 	// get handler and enable timer
 	TIM_HandleTypeDef* handler = get_handler(timer);

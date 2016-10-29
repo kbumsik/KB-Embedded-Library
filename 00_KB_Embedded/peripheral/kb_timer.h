@@ -46,15 +46,15 @@
 extern "C" {
 #endif
 
-int kb_timer_ch_pin(kb_timer_t timer, uint32_t baud_rate);
-
 int kb_pwm_init(kb_timer_t timer, kb_timer_init_t *setting);
+int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port, kb_gpio_pin_t pin);
 
-int kb_pwm_ch_set_percent(kb_timer_t timer, kb_timer_ch_t channel, uint8_t duty_cycle_percent);
+// PWM functions
+int kb_pwm_percent(kb_timer_t timer, kb_timer_ch_t channel, uint8_t duty_cycle_percent);
 // 1 permyriad = 0.01%. 10,000 permyriad = 1%. max 10,000 permyriad
-int kb_pwm_ch_set_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t duty_cycle_permyriad);
-int kb_pwm_ch_start(kb_timer_t timer, kb_timer_ch_t channel);
-int kb_pwm_ch_stop(kb_timer_t timer, kb_timer_ch_t channel);
+int kb_pwm_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t duty_cycle_permyriad);
+int kb_pwm_start(kb_timer_t timer, kb_timer_ch_t channel);
+int kb_pwm_stop(kb_timer_t timer, kb_timer_ch_t channel);
 
 #ifdef __cplusplus
 }

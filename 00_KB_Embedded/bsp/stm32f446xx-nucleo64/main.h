@@ -41,12 +41,6 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define B1_Pin 				GPIO_PIN_13
-#define B1_GPIO_Port 		GPIOC
-
-
-#define LED1_Pin GPIO_PIN_5		//LD2
-#define LED1_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
