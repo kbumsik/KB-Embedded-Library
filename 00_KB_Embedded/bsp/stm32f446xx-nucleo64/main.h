@@ -41,8 +41,6 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define F_CPU_MHZ 180
-
 #define B1_Pin 				GPIO_PIN_13
 #define B1_GPIO_Port 		GPIOC
 

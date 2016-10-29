@@ -25,19 +25,20 @@
 #ifdef DEBUG
 	#if defined(DEBUG_TO_TERMINAL)
 		#include "kb_terminal.h"
-		#define kb_msg(msg, ...)	kb_terminal_printf("KB_LIB: " msg, ##__VA_ARGS__)
-		#define kb_warning(msg, ...)	kb_terminal_printf("KB_LIB: Warning: " msg, ##__VA_ARGS__)
-		#define kb_error(msg, ...)	kb_terminal_printf("KB_LIB: Error: " msg, ##__VA_ARGS__)
+		#define KB_MSG_BASE	"UNKOWN"
+		#define kb_msg(msg, ...)	kb_terminal_printf("KB_LIB:" KB_MSG_BASE ":%d:" msg, __LINE__ ,##__VA_ARGS__)
+		#define kb_warning(msg, ...)	kb_terminal_printf("KB_LIB:" KB_MSG_BASE ":%d:Warning:" msg, __LINE__ , ##__VA_ARGS__)
+		#define kb_error(msg, ...)	kb_terminal_printf("KB_LIB:" KB_MSG_BASE ":%d:Error: " msg, __LINE__ , ##__VA_ARGS__)
 	#elif defined(DEBUG_TO_SEMIHOSTING)
 		#include "trace.h"
-		#define kb_msg(msg, ...)	trace_printf("KB_LIB: " msg, ##__VA_ARGS__)
-		#define kb_warning(msg, ...)	trace_printf("KB_LIB: Warning: " msg, ##__VA_ARGS__)
-		#define kb_error(msg, ...)	trace_printf("KB_LIB: Error: " msg, ##__VA_ARGS__)
+		#define kb_msg(msg, ...)	trace_printf("KB_LIB:" KB_MSG_BASE ":%d:" msg, __LINE__ , ##__VA_ARGS__)
+		#define kb_warning(msg, ...)	trace_printf("KB_LIB:" KB_MSG_BASE ":%d:Warning:" msg, __LINE__ , ##__VA_ARGS__)
+		#define kb_error(msg, ...)	trace_printf("KB_LIB:" KB_MSG_BASE ":%d:Error: " msg, __LINE__ , ##__VA_ARGS__)
 	#else
 		#include "trace.h"
-		#define kb_msg(msg, ...)	trace_printf("KB_LIB: " msg, ##__VA_ARGS__)
-		#define kb_warning(msg, ...)	trace_printf("KB_LIB: Warning: " msg, ##__VA_ARGS__)
-		#define kb_error(msg, ...)	trace_printf("KB_LIB: Error: " msg, ##__VA_ARGS__)
+		#define kb_msg(msg, ...)	trace_printf("KB_LIB:" KB_MSG_BASE ":%d:" msg, __LINE__ , ##__VA_ARGS__)
+		#define kb_warning(msg, ...)	trace_printf("KB_LIB:" KB_MSG_BASE ":%d:Warning:" msg, __LINE__ , ##__VA_ARGS__)
+		#define kb_error(msg, ...)	trace_printf("KB_LIB:" KB_MSG_BASE ":%d:Error: " msg, __LINE__ , ##__VA_ARGS__)
 	#endif
 #else
 	#define kb_msg(msg, ...)

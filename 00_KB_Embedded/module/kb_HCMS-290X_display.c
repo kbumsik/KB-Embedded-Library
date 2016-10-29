@@ -4,6 +4,11 @@
 #include "kb_tick.h"
 #include <stdio.h>
 
+// base name change. Used with kb_msg(). See @kb_base.h
+#ifdef KB_MSG_BASE
+	#undef KB_MSG_BASE
+	#define KB_MSG_BASE "HCMS-290X"
+#endif
 
 static const uint8_t fontTable[];
 
@@ -55,13 +60,13 @@ static void _write_ctrl_reg(uint8_t data)
 	_CE_set(0);	//enable data writing
 
 	// write
-	kb_spi_send(HCMS_290X_SPI, &data, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &data, 1);
 
 	//end
 	kb_delay_us(10);
 	_CE_set(1);   //latch on
 	uint8_t dummy = 0x00;
-	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &dummy, 1);
 }
 
 void hcms_290x_init(void)
@@ -92,10 +97,10 @@ void hcms_290x_init(void)
 	kb_gpio_init(HCMS_290X_RESET_PORT, HCMS_290X_RESET_PIN, &gpio_setting);
 
 	// MOSI pin
-	kb_spi_mosi_init(HCMS_290X_SPI, HCMS_290X_MOSI_PORT, HCMS_290X_MOSI_PIN);
+	kb_spi_mosi_pin(HCMS_290X_SPI, HCMS_290X_MOSI_PORT, HCMS_290X_MOSI_PIN);
 
 	// SCK pin
-	kb_spi_sck_init(HCMS_290X_SPI, HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN);
+	kb_spi_sck_pin(HCMS_290X_SPI, HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN);
 
 	// then init SPI.
 	/*
@@ -130,8 +135,6 @@ void hcms_290x_init(void)
 
 void hcms_290x_matrix(char *s)
 {
-	int i, j;
-
 	// initial pin setting
 	uint8_t *ptr; //pointer for starting address of character s
 	_RS_set(0);	//select dot register
@@ -139,14 +142,10 @@ void hcms_290x_matrix(char *s)
 	_CE_set(0);	//enable data writing
 
 	// write
-	for(i=0; i<4; i++)
+	for(int i=0; i<4; i++)
 	{
 		ptr = (uint8_t *)(fontTable + s[i]*5);
-		for(j=0; j<5; j++)
-		{	// Fix it to just write 5 bytes
-			kb_spi_send(HCMS_290X_SPI, ptr, 1, TIMEOUT_MAX);
-			ptr++;
-		}//for j
+		kb_spi_send(HCMS_290X_SPI, ptr, 5);
 	}//for i
 
 	// end
@@ -154,7 +153,7 @@ void hcms_290x_matrix(char *s)
 	_CE_set(1);
 	// We need to make falling edge to SCK pin to latch on
 	uint8_t dummy = 0x00;
-	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &dummy, 1);
 }
 
 void hcms_290x_err(int err) {
@@ -217,14 +216,14 @@ void hcms_290x_clear(void)
 	// write
 	for(i=0; i<20; i++)
 	{
-		kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
+		kb_spi_send(HCMS_290X_SPI, &dummy, 1);
 	}
 
 	// end
 	kb_delay_us(10);
 	_CE_set(1);   //latch on
 	// We need to make falling edge to SCK pin to latch on
-	kb_spi_send(HCMS_290X_SPI, &dummy, 1, 0);
+	kb_spi_send(HCMS_290X_SPI, &dummy, 1);
 }
 
 

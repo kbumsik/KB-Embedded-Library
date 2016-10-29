@@ -52,6 +52,8 @@ __weak void system_init(void)
 	  // Call the CSMSIS system clock routine to store the clock frequency
 	  // in the SystemCoreClock global RAM location.
 	  SystemCoreClockUpdate();
+	  // update f_cpu_MHz too
+	  kb_tick_update_f_cpu_mhz();
 
 	  // Enable fault calls
 	  enable_faults();

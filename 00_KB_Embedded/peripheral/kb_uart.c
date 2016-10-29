@@ -9,6 +9,12 @@
 #include "kb_alternate_pins.h"
 #include <string.h>
 
+// base name change. Used with kb_msg(). See @kb_base.h
+#ifdef KB_MSG_BASE
+	#undef KB_MSG_BASE
+	#define KB_MSG_BASE "UART"
+#endif
+
 #if defined(STM32F446xx)
     static UART_HandleTypeDef uart_1_h_;
     static UART_HandleTypeDef uart_2_h_;
@@ -77,7 +83,7 @@ int kb_uart_init(kb_uart_t uart, uint32_t baud_rate)
     return HAL_UART_Init(handler);
 }
 
-int kb_uart_tx_init(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
 {
     uint32_t alternate = GPIO_USART_TX_AF_(uart, port, pin);
     if (alternate == KB_WRONG_PIN)
@@ -96,7 +102,7 @@ int kb_uart_tx_init(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
     return 0;
 }
 
-int kb_uart_rx_init(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
 {
     uint32_t alternate = GPIO_USART_RX_AF_(uart, port, pin);
 	if (alternate == KB_WRONG_PIN)

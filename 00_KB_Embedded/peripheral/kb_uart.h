@@ -23,8 +23,8 @@ extern "C" {
 #endif
 
 int kb_uart_init(kb_uart_t uart, uint32_t baud_rate);
-int kb_uart_tx_init(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin);
-int kb_uart_rx_init(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin);
+int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin);
+int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin);
 
 int kb_uart_send(kb_uart_t uart, const uint8_t *buffer, uint16_t size, uint32_t timeout);
 int kb_uart_send_str(kb_uart_t uart, const char *str, uint32_t timeout);
