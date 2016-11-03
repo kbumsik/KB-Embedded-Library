@@ -97,10 +97,10 @@ void hcms_290x_init(void)
 	kb_gpio_init(HCMS_290X_RESET_PORT, HCMS_290X_RESET_PIN, &gpio_setting);
 
 	// MOSI pin
-	kb_spi_mosi_pin(HCMS_290X_SPI, HCMS_290X_MOSI_PORT, HCMS_290X_MOSI_PIN);
+	kb_spi_mosi_pin(HCMS_290X_SPI, HCMS_290X_MOSI_PORT, HCMS_290X_MOSI_PIN, NOPULL);
 
 	// SCK pin
-	kb_spi_sck_pin(HCMS_290X_SPI, HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN);
+	kb_spi_sck_pin(HCMS_290X_SPI, HCMS_290X_SCK_PORT, HCMS_290X_SCK_PIN, NOPULL);
 
 	// then init SPI.
 	/*
@@ -114,7 +114,7 @@ void hcms_290x_init(void)
 			.polarity = TRAILING_RISING_EDGE,
 			.frequency = 4000000
 	};
-	kb_spi_init(HCMS_290X_SPI, &spi_init);	// TODO: frequency setting
+	kb_spi_init(HCMS_290X_SPI, &spi_init);
 	// it was originally SPI_BAUDRATEPRESCALER_16
 
 	// set pins

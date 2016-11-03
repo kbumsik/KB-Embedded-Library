@@ -9,12 +9,12 @@
 #define BSP_STM32F446XX_NUCLEO64_KB_MODULE_CONFIG_H_
 
 // Push button settings
-#define B1_Pin 				GPIO_PIN_13
-#define B1_GPIO_Port 		GPIOC
+#define B1_PORT 		GPIOC
+#define B1_PIN 			GPIO_PIN_13
 
 // LED1 settings
-#define LED1_Pin GPIO_PIN_5		//LD2
-#define LED1_GPIO_Port GPIOA
+#define LED1_PORT	GPIOA		//LD2
+#define LED1_PIN	GPIO_PIN_5
 
 // Terminal settings
 #define TERMINAL_UART			USART2

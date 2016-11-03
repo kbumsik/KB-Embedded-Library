@@ -15,12 +15,12 @@ char kb_terminal_rx_buffer[80];
 
 int kb_terminal_init(void)
 {
-	kb_uart_tx_pin(TERMINAL_UART, TERMINAL_TX_PORT, TERMINAL_TX_PIN);
-	kb_uart_rx_pin(TERMINAL_UART, TERMINAL_RX_PORT, TERMINAL_RX_PIN);
+	kb_uart_tx_pin(TERMINAL_UART, TERMINAL_TX_PORT, TERMINAL_TX_PIN, NOPULL);
+	kb_uart_rx_pin(TERMINAL_UART, TERMINAL_RX_PORT, TERMINAL_RX_PIN, NOPULL);
 	return kb_uart_init(TERMINAL_UART, TERMINAL_BAUD_RATE);
 }
 
-int kb_terminal_puts(const char *str)
+int kb_terminal_puts(char *str)
 {
     return kb_uart_send_str(TERMINAL_UART, str, TIMEOUT_MAX);
 }

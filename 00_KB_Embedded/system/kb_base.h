@@ -54,7 +54,7 @@
 		KB_BUSY = HAL_BUSY,
 		KB_TIMEOUT = HAL_TIMEOUT
 	} kb_status_t;
-	#define TIMEOUT_MAX	HAL_MAX_DELAY
+	#define TIMEOUT_MAX		HAL_MAX_DELAY
 #else
 #endif
 

@@ -11,15 +11,48 @@
 #include "kb_base.h"
 
 #if defined(STM32)
-	typedef GPIO_TypeDef* 	kb_gpio_port_t;
-	typedef uint16_t 		kb_gpio_pin_t;
+	// typedefs
+	/* TODO: Think of a good design for GPIO */
+	typedef GPIO_TypeDef* 		kb_gpio_port_t;
+	typedef uint16_t 			kb_gpio_pin_t;
+	typedef GPIO_InitTypeDef 	kb_gpio_init_t;
+	typedef GPIO_PinState 		kb_gpio_state_t;
+	typedef	uint32_t			kb_gpio_pull_t;
+	// Pull state
+	#define NOPULL		GPIO_NOPULL
+	#define PULLUP		GPIO_PULLUP
+	#define PULLDOWN	GPIO_PULLDOWN
+	// Ports
+	#define PORTA	GPIOA
+	#define PORTB	GPIOB
+	#define PORTC	GPIOC
+	#define PORTD	GPIOD
+	#define PORTE	GPIOE
+	#define PORTF	GPIOF
+	#define PORTG	GPIOG
+	#define PORTH	GPIOH
+	// Pins
+	#define PIN_0		GPIO_PIN_0
+	#define PIN_1		GPIO_PIN_1
+	#define PIN_2		GPIO_PIN_2
+	#define PIN_3		GPIO_PIN_3
+	#define PIN_4		GPIO_PIN_4
+	#define PIN_5		GPIO_PIN_5
+	#define PIN_6		GPIO_PIN_6
+	#define PIN_7		GPIO_PIN_7
+	#define PIN_8		GPIO_PIN_8
+	#define PIN_9		GPIO_PIN_9
+	#define PIN_10		GPIO_PIN_10
+	#define PIN_11		GPIO_PIN_11
+	#define PIN_12		GPIO_PIN_12
+	#define PIN_13		GPIO_PIN_13
+	#define PIN_14		GPIO_PIN_14
+	#define PIN_15		GPIO_PIN_15
+	#define PIN_All		GPIO_PIN_All
 #else
 	#error "Please define device driver (e.g. USE_HAL_DRIVER)\n"
 #endif
 
-/* TODO: Think of a good design for GPIO */
-typedef GPIO_InitTypeDef kb_gpio_init_t;
-typedef GPIO_PinState kb_gpio_state_t;
 
 #ifdef __cplusplus
 extern "C"{

@@ -397,6 +397,45 @@
 
 #define IS_TIM_CH4_AF9_(timer, port, pin) (0)
 
+/******************************************************************************
+ * I2C
+ ******************************************************************************/
+// Select alternate mode functions
+// Don't care about GPIO_AF7_USART'5' <-- the SPI number. They are the same value.
+#define GPIO_I2C_SCL_AF_(i2c, port, pin) (\
+							IS_I2C_SCL_AF4_(i2c, port, pin)?GPIO_AF4_I2C1: \
+							KB_WRONG_PIN)
+
+#define GPIO_I2C_SDA_AF_(i2c, port, pin) (\
+							IS_I2C_SDA_AF4_(i2c, port, pin)?GPIO_AF4_I2C1: \
+							KB_WRONG_PIN)
+
+// AF7
+#define IS_I2C_SCL_AF4_(i2c, port, pin) (\
+							((i2c == I2C1) && ( \
+							(port == GPIOB && pin == GPIO_PIN_6)|| \
+							(port == GPIOB && pin == GPIO_PIN_8))) \
+							|| ((i2c == I2C2) && ( \
+							(port == GPIOB && pin == GPIO_PIN_10)|| \
+							(port == GPIOF && pin == GPIO_PIN_1))) \
+							|| ((i2c == I2C3) && ( \
+							(port == GPIOA && pin == GPIO_PIN_8))) \
+							)
+
+#define IS_I2C_SDA_AF4_(i2c, port, pin) (\
+							((i2c == I2C1) && ( \
+							(port == GPIOB && pin == GPIO_PIN_7)|| \
+							(port == GPIOB && pin == GPIO_PIN_9))) \
+							|| ((i2c == I2C2) && ( \
+							(port == GPIOB && pin == GPIO_PIN_3)|| \
+							(port == GPIOB && pin == GPIO_PIN_11)|| \
+							(port == GPIOC && pin == GPIO_PIN_12)|| \
+							(port == GPIOF && pin == GPIO_PIN_0))) \
+							|| ((i2c == I2C3) && ( \
+							(port == GPIOB && pin == GPIO_PIN_4)|| \
+							(port == GPIOC && pin == GPIO_PIN_9))) \
+							)
+
 #endif /* STM32F446xx */
 
 #endif /* BSP_STM32F446XX_NUCLEO64_KB_ALTERNATE_PINS_H_ */

@@ -7,6 +7,13 @@
 
 #include "kb_gpio.h"
 
+// base name change. Used with kb_msg(). See @kb_base.h
+#ifdef KB_MSG_BASE
+	#undef KB_MSG_BASE
+	#define KB_MSG_BASE "GPIO"
+#endif
+
+
 void kb_gpio_init(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init)
 {
 	kb_gpio_enable_clk(port);
@@ -69,7 +76,7 @@ void kb_gpio_enable_clk(kb_gpio_port_t port)
 	}
 	else
 	{
-		// TODO: Error management here.
+		kb_error("Wrong port selected for clock!\r\n");
 	}
 	return;
 }

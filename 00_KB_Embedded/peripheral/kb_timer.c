@@ -39,7 +39,7 @@ static void enable_timer_clk_ (kb_timer_t timer);
 #endif
 
 
-int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
 	uint32_t alternate;
 	switch (channel)
@@ -69,7 +69,7 @@ int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port
 	// Init GPIOs
 	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_NOPULL,
+		.Pull = pull,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
@@ -78,7 +78,7 @@ int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port
 }
 
 
-int kb_pwm_init(kb_timer_t timer, kb_timer_init_t *settings)
+int kb_pwm_init(kb_timer_t timer, kb_pwm_init_t *settings)
 {
 	// get handler and enable timer
 	TIM_HandleTypeDef* handler = get_handler(timer);
@@ -203,6 +203,127 @@ int kb_pwm_stop(kb_timer_t timer, kb_timer_ch_t channel)
 	}
 	return status;
 }
+
+
+int kb_encoder_init(kb_timer_t timer, kb_encoder_init_t *setting)
+{
+	// get handler and enable timer
+	TIM_HandleTypeDef* handler = get_handler(timer);
+	if (NULL == handler)
+	{
+		return KB_ERROR;
+	}
+	enable_timer_clk_(timer);
+
+	handler->Init.Period = 0xffffffff; //0xFFFF
+	handler->Init.Prescaler = setting->prescaler;
+	handler->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	handler->Init.RepetitionCounter = 0;
+
+	TIM_Encoder_InitTypeDef encoder_config;
+	encoder_config.EncoderMode = TIM_ENCODERMODE_TI12;
+
+	switch(setting->direction)
+	{
+	case CW:
+		handler->Init.CounterMode = TIM_COUNTERMODE_DOWN;
+
+		encoder_config.IC1Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
+		encoder_config.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+		encoder_config.IC1Prescaler = TIM_ICPSC_DIV1;
+		encoder_config.IC1Filter = 0xf;
+	
+		encoder_config.IC2Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
+		encoder_config.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+		encoder_config.IC2Prescaler = TIM_ICPSC_DIV1;
+		encoder_config.IC2Filter = 0xf;
+		break;
+	case CCW:
+		handler->Init.CounterMode = TIM_COUNTERMODE_UP;
+
+		encoder_config.IC1Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
+		encoder_config.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+		encoder_config.IC1Prescaler = TIM_ICPSC_DIV1;
+		encoder_config.IC1Filter = 0xf;
+	
+		encoder_config.IC2Polarity = TIM_ICPOLARITY_FALLING; //TIM_ICPOLARITY_RISING;
+		encoder_config.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+		encoder_config.IC2Prescaler = TIM_ICPSC_DIV1;
+		encoder_config.IC2Filter = 0xf;
+		break;
+	default:
+		kb_error("Incorrect encoder direction");
+	}
+
+	kb_status_t status = HAL_TIM_Encoder_Init(handler, &encoder_config);
+	if(KB_OK != status)
+	{
+		kb_warning("Error init encoder!\r\n");
+	}
+	return status;
+}
+
+
+int kb_encoder_start(kb_timer_t timer)
+{
+	// get handler and enable timer
+	TIM_HandleTypeDef* handler = get_handler(timer);
+	if (NULL == handler)
+	{
+		return KB_ERROR;
+	}
+
+	kb_status_t status = HAL_TIM_Encoder_Start(handler, TIM_CHANNEL_ALL);
+	if(KB_OK != status)
+	{
+		kb_warning("Error starting Encoder!\r\n");
+	}
+	return status;
+}
+
+
+int kb_encoder_stop(kb_timer_t timer)
+{
+	// get handler and enable timer
+	TIM_HandleTypeDef* handler = get_handler(timer);
+	if (NULL == handler)
+	{
+		return KB_ERROR;
+	}
+
+	kb_status_t status = HAL_TIM_Encoder_Stop(handler, TIM_CHANNEL_ALL);
+	if(KB_OK != status)
+	{
+		kb_warning("Error stopping Encoder!\r\n");
+	}
+	return status;
+}
+
+
+int32_t kb_encoder_set(kb_timer_t timer, int32_t input)
+{
+	// get handler and enable timer
+	TIM_HandleTypeDef* handler = get_handler(timer);
+	if (NULL == handler)
+	{
+		return 0;
+	}
+	handler->Instance->CNT = input;
+	return handler->Instance->CNT;
+}
+
+
+int32_t kb_encoder_count(kb_timer_t timer)
+{
+	// get handler and enable timer
+	TIM_HandleTypeDef* handler = get_handler(timer);
+	if (NULL == handler)
+	{
+		return 0;
+	}
+	return handler->Instance->CNT;
+}
+
 
 static uint32_t get_bus_freq_(kb_timer_t timer)
 {

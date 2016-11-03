@@ -49,6 +49,5 @@ void SysTick_Handler (void)
 {
 	// DO NOT loop, just return.
 	// Useful in case someone (like STM HAL) inadvertently enables SysTick.
-	// TODO: put my timer
 	kb_tick_inc_ms();
 }

@@ -33,7 +33,7 @@ extern char kb_terminal_tx_buffer[];
 extern char kb_terminal_rx_buffer[];
 
 int kb_terminal_init(void);
-int kb_terminal_puts(const char *str);
+int kb_terminal_puts(char *str);
 char *kb_terminal_gets(char *str);
 #define kb_terminal_printf(format, ... ) do {\
 							sprintf(kb_terminal_tx_buffer, format, ##__VA_ARGS__); \

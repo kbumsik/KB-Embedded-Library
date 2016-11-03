@@ -139,7 +139,7 @@ int kb_spi_init(kb_spi_t spi, kb_spi_init_t *settings)
 }
 
 
-int kb_spi_mosi_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_spi_mosi_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
 	uint32_t alternate = GPIO_SPI_MOSI_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
@@ -151,7 +151,7 @@ int kb_spi_mosi_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	// Init GPIOs
 	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_PULLUP,
+		.Pull = pull,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
@@ -160,7 +160,7 @@ int kb_spi_mosi_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 }
 
 
-int kb_spi_miso_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_spi_miso_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
 	uint32_t alternate = GPIO_SPI_MISO_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
@@ -172,7 +172,7 @@ int kb_spi_miso_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	// Init GPIOs
 	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_PULLUP,
+		.Pull = pull,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
@@ -181,7 +181,7 @@ int kb_spi_miso_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 }
 
 
-int kb_spi_sck_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_spi_sck_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
 	uint32_t alternate = GPIO_SPI_SCK_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
@@ -193,7 +193,7 @@ int kb_spi_sck_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	// Init GPIOs
 	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_PULLUP,
+		.Pull = pull,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
@@ -216,6 +216,49 @@ int kb_spi_send_timeout(kb_spi_t spi, uint8_t *buf, uint16_t size, uint32_t time
 		return KB_ERROR;
 	}
 	kb_status_t result = HAL_SPI_Transmit(handler, buf, size, timeout);
+	if (result != KB_OK) {
+		kb_error("Error in sending.\r\n");
+	}
+	return result;
+}
+
+
+int kb_spi_receive(kb_spi_t spi, uint8_t* buf, uint16_t size)
+{
+	return kb_spi_receive_timeout(spi, buf, size, TIMEOUT_MAX);
+}
+
+
+int kb_spi_receive_timeout(kb_spi_t spi, uint8_t *buf, uint16_t size, uint32_t timeout)
+{
+	// select handler
+	SPI_HandleTypeDef* handler = get_handler(spi);
+	if (NULL == handler) {
+		return KB_ERROR;
+	}
+	kb_status_t result = HAL_SPI_Receive(handler, buf, size, timeout);
+	if (result != KB_OK) {
+		kb_error("Error in sending.\r\n");
+	}
+	return result;
+}
+
+
+inline int kb_spi_sendreceive(kb_spi_t spi, uint8_t *tx_buf, uint8_t *rx_buf, uint16_t size)
+{
+	return kb_spi_sendreceive_timeout(spi, tx_buf, rx_buf, size, TIMEOUT_MAX);
+}
+
+
+int kb_spi_sendreceive_timeout(kb_spi_t spi, uint8_t *tx_buf, uint8_t *rx_buf, uint16_t size, uint32_t timeout)
+{
+
+	// select handler
+	SPI_HandleTypeDef* handler = get_handler(spi);
+	if (NULL == handler) {
+		return KB_ERROR;
+	}
+	kb_status_t result = HAL_SPI_TransmitReceive(handler, tx_buf, rx_buf, size, timeout);
 	if (result != KB_OK) {
 		kb_error("Error in sending.\r\n");
 	}

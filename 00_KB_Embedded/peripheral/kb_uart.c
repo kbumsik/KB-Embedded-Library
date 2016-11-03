@@ -83,7 +83,7 @@ int kb_uart_init(kb_uart_t uart, uint32_t baud_rate)
     return HAL_UART_Init(handler);
 }
 
-int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
     uint32_t alternate = GPIO_USART_TX_AF_(uart, port, pin);
     if (alternate == KB_WRONG_PIN)
@@ -94,7 +94,7 @@ int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
     // Init GPIO
     kb_gpio_init_t gpio_setting = {
         .Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_NOPULL,		// TODO: PULLUP?
+		.Pull = pull,
         .Alternate = alternate,
         .Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
     };
@@ -102,7 +102,7 @@ int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
     return 0;
 }
 
-int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
+int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
     uint32_t alternate = GPIO_USART_RX_AF_(uart, port, pin);
 	if (alternate == KB_WRONG_PIN)
@@ -113,7 +113,7 @@ int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	// Init GPIO
 	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_AF_PP,
-		.Pull = GPIO_NOPULL,
+		.Pull = pull,
 		.Alternate = alternate,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
@@ -121,7 +121,7 @@ int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin)
 	return 0;
 }
 
-int kb_uart_send(kb_uart_t uart, const uint8_t *buffer, uint16_t size, uint32_t timeout)
+int kb_uart_send(kb_uart_t uart, uint8_t *buffer, uint16_t size, uint32_t timeout)
 {
     // select handler
     UART_HandleTypeDef* handler;
@@ -156,7 +156,7 @@ int kb_uart_send(kb_uart_t uart, const uint8_t *buffer, uint16_t size, uint32_t 
     return HAL_UART_Transmit(handler, buffer, size, timeout);
 }
 
-int kb_uart_send_str(kb_uart_t uart, const char *str, uint32_t timeout)
+int kb_uart_send_str(kb_uart_t uart, char *str, uint32_t timeout)
 {
 	return	kb_uart_send(uart, (uint8_t *)str, (uint16_t)strlen(str), timeout);
 }

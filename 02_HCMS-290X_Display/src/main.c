@@ -18,19 +18,27 @@ int main(void)
 
     // init peripherals for the LED display
     hcms_290x_init();
-
     hcms_290x_matrix("STRT");
-    kb_gpio_toggle(LED1_GPIO_Port, LED1_Pin);
+
+    // init motion detector
+    kb_gpio_init_t motion_cofig = {
+    		.Mode = GPIO_MODE_INPUT,
+			.Pull = GPIO_PULLDOWN,
+			.Speed = GPIO_SPEED_FREQ_LOW
+    };
+    kb_gpio_init(PORTC, PIN_8, &motion_cofig);
+
+    kb_gpio_toggle(LED1_PORT, LED1_PIN);
 
     // PWM: PA8
     uint32_t freq;
-    kb_timer_init_t buzzer_config = {
+    kb_pwm_init_t buzzer_config = {
     		.clock_frequency = 10000000, // 1MHz
 			.period = 10000				// 2kHz
     };
     freq = 10000000;
     kb_pwm_init(TIMER1, &buzzer_config);
-    kb_timer_ch_pin(TIMER1, CH_1, GPIOA, GPIO_PIN_8);
+    kb_timer_ch_pin(TIMER1, CH_1, GPIOA, GPIO_PIN_8, NOPULL);
     // start buzzer
     kb_pwm_percent(TIMER1, CH_1, 80);
     kb_pwm_start(TIMER1, CH_1);
@@ -39,18 +47,18 @@ int main(void)
     // stop buzzer
     kb_pwm_stop(TIMER1, CH_1);
 
-    kb_gpio_toggle(LED1_GPIO_Port, LED1_Pin);
+    kb_gpio_toggle(LED1_PORT, LED1_PIN);
     trace_puts("Hello ARM World!");
     kb_terminal_puts("Hello World!\r\n");
     uint32_t seconds = 0;
     while (1)
     {
-    	kb_gpio_toggle(LED1_GPIO_Port, LED1_Pin);
+    	kb_gpio_toggle(LED1_PORT, LED1_PIN);
         kb_terminal_puts("Blink!\r\n");
     	kb_delay_us(1000000);
 
         ++seconds;
-    	if(kb_gpio_read(B1_GPIO_Port, B1_Pin) == 0)
+    	if(kb_gpio_read(B1_PORT, B1_PIN) == 0)
     	{
             kb_terminal_puts("Button Pressed!\r\n");
             hcms_290x_matrix("PRSD");
@@ -71,5 +79,11 @@ int main(void)
 
         // Count seconds on the trace device.
         trace_printf("Second %u\n", seconds);
+
+        // detect motion
+        if (kb_gpio_read(PORTC, PIN_8) == 1)
+        {
+            hcms_290x_matrix("DETC");
+        }
     }
 }
