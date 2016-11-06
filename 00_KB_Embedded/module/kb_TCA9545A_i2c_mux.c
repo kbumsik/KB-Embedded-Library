@@ -21,11 +21,16 @@
 #define TIMEOUT_	(100)
 
 static inline void reset_(void);
+static int write_(uint8_t input);
+static uint8_t read_(void);
 
 int tca9545a_init(void)
 {
-	volatile uint8_t buf;
+	// SDA, SCL pin
+    kb_i2c_sda_pin(TCA9545A_I2C, TCA9545A_SDA_PORT, TCA9545A_SDA_PIN, PULLUP);
+    kb_i2c_scl_pin(TCA9545A_I2C, TCA9545A_SCL_PORT, TCA9545A_SCL_PIN, PULLUP);
 
+    // Reset pin
 	kb_gpio_init_t reset_pin_settings;
 	reset_pin_settings.Mode = GPIO_MODE_OUTPUT_PP;
 	reset_pin_settings.Pull = GPIO_PULLUP;
@@ -40,34 +45,65 @@ int tca9545a_init(void)
 	};
 	kb_i2c_init(TCA9545A_I2C, &setting);
 
-	/* Check the chip information */
-	buf = tca9545a_current_ch();
+	/* try reading chip information */
+	tca9545a_current_ch();
 	return 0;
 }
 
 
 int tca9545a_select_ch(uint8_t ch)
 {
-	uint8_t send;
-	switch(ch)
+	if(ch > 0x0F)
 	{
-	case 0:
-		send = 0x01;
-		break;
-	case 1:
-		send = 0x02;
-		break;
-	case 2:
-		send = 0x04;
-		break;
-	case 3:
-		send = 0x08;
-		break;
-	default:
 		kb_error("Wrong channel\r\n");
 		return -1;
 	}
-	while (KB_OK != kb_i2c_send_timeout(TCA9545A_I2C, ADDR_, &send, 1, TIMEOUT_))
+	int result = write_(ch);
+	/* FIXME: Delay needed, but what is the minimum? */
+	kb_delay_us(100);
+	return result;
+}
+
+
+uint8_t tca9545a_current_ch(void)
+{
+	return	read_() & 0x0F;
+}
+
+
+uint8_t tca9545a_current_it(void)
+{
+	return	(read_() & 0xF0) >> 4;
+}
+
+
+uint8_t tca9545a_clear_it(uint8_t ch)
+{
+	// read
+	uint8_t value = read_();
+	// mask
+	uint8_t inturrpts = value & 0xF0;
+	inturrpts &= ~(ch<<4);
+	value = (value & 0x0F)|inturrpts;
+	// and write
+	int result = write_(value);
+	/* FIXME: Delay needed, but what is the minimum? */
+	kb_delay_us(100);
+	return result;
+}
+
+
+static inline void reset_(void)
+{
+	kb_gpio_set(TCA9545A_RESET_PORT, TCA9545A_RESET_PIN, GPIO_PIN_RESET);
+	kb_delay_ms(1);
+	kb_gpio_set(TCA9545A_RESET_PORT, TCA9545A_RESET_PIN, GPIO_PIN_SET);
+}
+
+
+static int write_(uint8_t input)
+{
+	while (KB_OK != kb_i2c_send_timeout(TCA9545A_I2C, ADDR_, &input, 1, TIMEOUT_))
 	{
 		kb_error("TCA9545 not found! retry\n");
 		if (0 == tca9545a_init())
@@ -76,13 +112,11 @@ int tca9545a_select_ch(uint8_t ch)
 		}
 		return -1;
 	}
-	/* FIXME: Delay needed, but what is the minimum? */
-	kb_delay_us(100);
 	return 0;
 }
 
 
-uint8_t tca9545a_current_ch(void)
+static uint8_t read_(void)
 {
 	uint8_t buf = 0;
 	uint8_t retry = 0;
@@ -100,10 +134,3 @@ uint8_t tca9545a_current_ch(void)
 	return	buf;
 }
 
-
-static inline void reset_(void)
-{
-	kb_gpio_set(TCA9545A_RESET_PORT, TCA9545A_RESET_PIN, GPIO_PIN_RESET);
-	kb_delay_ms(1);
-	kb_gpio_set(TCA9545A_RESET_PORT, TCA9545A_RESET_PIN, GPIO_PIN_SET);
-}

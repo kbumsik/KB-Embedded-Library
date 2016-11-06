@@ -75,7 +75,7 @@ void hcms_290x_init(void)
 	//  CE PIN
 	kb_gpio_init_t gpio_setting = {
 		.Mode = GPIO_MODE_OUTPUT_PP,
-		.Pull = GPIO_PULLDOWN,
+		.Pull = GPIO_PULLUP,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
 	kb_gpio_init(HCMS_290X_CE_PORT, HCMS_290X_CE_PIN, &gpio_setting);
@@ -83,7 +83,7 @@ void hcms_290x_init(void)
 	// RS pin
 	gpio_setting = (kb_gpio_init_t ){
 		.Mode = GPIO_MODE_OUTPUT_PP,
-		.Pull = GPIO_NOPULL,
+		.Pull = GPIO_PULLUP,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
 	kb_gpio_init(HCMS_290X_RS_PORT, HCMS_290X_RS_PIN, &gpio_setting);
@@ -91,7 +91,7 @@ void hcms_290x_init(void)
 	// RESET pin
 	gpio_setting = (kb_gpio_init_t){
 		.Mode = GPIO_MODE_OUTPUT_PP,
-		.Pull = GPIO_NOPULL,
+		.Pull = GPIO_PULLUP,
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
 	kb_gpio_init(HCMS_290X_RESET_PORT, HCMS_290X_RESET_PIN, &gpio_setting);

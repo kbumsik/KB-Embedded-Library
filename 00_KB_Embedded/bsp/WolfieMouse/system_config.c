@@ -1,22 +1,14 @@
 /*
- * initialize_hardware.c
- *
- *  Created on: Oct 22, 2016
- *      Author: Bumsik Kim
- */
-
-/*
  * system_config_tmplete.c
  *
  *  Created on: Oct 20, 2016
  *      Author: Bumsik Kim
  */
 
-#include "stm32f4xx_hal.h"
+#include "kb_base.h"
+#include "kb_tick.h"
 #include "system_config.h"
 #include "faults.h"
-#include "stm32f4xx_hal_def.h"
-#include "kb_timer.h"
 
 
 /**
@@ -63,12 +55,14 @@ void system_init(void)
 	  // Call the CSMSIS system clock routine to store the clock frequency
 	  // in the SystemCoreClock global RAM location.
 	  SystemCoreClockUpdate();
+	  // update f_cpu_MHz too
+	  kb_tick_update_f_cpu_mhz();
 
 	  // Enable fault calls
 	  enable_faults();
 
 	  // init timer
-	  kb_timer_init();
+	  kb_tick_init();
 }
 
 
@@ -94,7 +88,7 @@ void SystemClock_Config(void)
 	  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
 	  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
 	  RCC_OscInitStruct.PLL.PLLM = 8;
-	  RCC_OscInitStruct.PLL.PLLN = 180;
+	  RCC_OscInitStruct.PLL.PLLN = 120;
 	  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
 	  RCC_OscInitStruct.PLL.PLLQ = 2;
 	  RCC_OscInitStruct.PLL.PLLR = 2;
@@ -146,39 +140,34 @@ void SystemClock_Config(void)
      PA2   ------> USART2_TX
      PA3   ------> USART2_RX
 */
+#include "kb_gpio.h"
+#include "kb_terminal.h"
 void peripheral_init(void)
 {
-
-	  GPIO_InitTypeDef GPIO_InitStruct;
-
-	  /* GPIO Ports Clock Enable */
-	  __HAL_RCC_GPIOC_CLK_ENABLE();
-	  __HAL_RCC_GPIOH_CLK_ENABLE();
-	  __HAL_RCC_GPIOA_CLK_ENABLE();
-	  __HAL_RCC_GPIOB_CLK_ENABLE();
+	  kb_gpio_init_t GPIO_InitStruct;
 
 	  /*Configure GPIO pin : B1_Pin */
-	  GPIO_InitStruct.Pin = B1_Pin;
-	  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+	  //GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	  //GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  //GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	  //kb_gpio_init(B1_PORT, B1_PIN, &GPIO_InitStruct);
 
-	  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-	  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
-	  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
-	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-	  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	  /*Configure UART */
+	  kb_terminal_init();
 
-	  /*Configure GPIO pin : LD2_Pin */
-	  GPIO_InitStruct.Pin = LED1_Pin;
+	  /*Configure GPIO pin : LED1_Pin */
 	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	  GPIO_InitStruct.Pull = GPIO_NOPULL;
 	  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+	  kb_gpio_init(LED1_PORT, LED1_PIN, &GPIO_InitStruct);
+	  kb_gpio_init(LED2_PORT, LED2_PIN, &GPIO_InitStruct);
+	  kb_gpio_init(LED3_PORT, LED3_PIN, &GPIO_InitStruct);
+	  kb_gpio_init(LED4_PORT, LED4_PIN, &GPIO_InitStruct);
 
 	  /*Configure GPIO pin Output Level */
-	  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+	  kb_gpio_set(LED1_PORT, LED1_PIN, GPIO_PIN_RESET);
+	  kb_gpio_set(LED2_PORT, LED2_PIN, GPIO_PIN_RESET);
+	  kb_gpio_set(LED3_PORT, LED3_PIN, GPIO_PIN_RESET);
+	  kb_gpio_set(LED4_PORT, LED4_PIN, GPIO_PIN_RESET);
 
 }

@@ -22,6 +22,11 @@
 	#define TCA9545A_RESET_PIN	GPIO_PIN_13
 #endif
 
+#define TCA9545A_CH_0	0x01U
+#define TCA9545A_CH_1	0x02U
+#define TCA9545A_CH_2	0x04U
+#define TCA9545A_CH_3	0x08U
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -29,6 +34,8 @@ extern "C"{
 int tca9545a_init(void);
 int tca9545a_select_ch(uint8_t ch);
 uint8_t tca9545a_current_ch(void);
+uint8_t tca9545a_current_it(void);
+uint8_t tca9545a_clear_it(uint8_t ch);
 
 #ifdef __cplusplus
 }
