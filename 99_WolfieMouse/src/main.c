@@ -8,6 +8,13 @@
 #include "kb_timer.h"
 #include "kb_TCA9545A_i2c_mux.h"
 #include "kb_VL6180X_range_finder.h"
+#include "encoder.h"
+#include "motor.h"
+
+#ifdef KB_MSG_BASE
+	#undef KB_MSG_BASE
+	#define KB_MSG_BASE "Main"
+#endif
 
 int main(void)
 {
@@ -32,6 +39,18 @@ int main(void)
     vl6180x_init();
     vl6180x_range_mm();
 
+    // init encoder
+    encoder_init();
+    int left = encoder_left_count();
+    int right = encoder_right_count();
+    kb_msg("left encoder: %d\r\n", left);
+    kb_msg("right encoder: %d\r\n", right);
+
+    // init motor
+    motor_init();
+    motor_speed_percent(CH_BOTH, 10);
+    // motor_start(CH_BOTH);
+
     kb_gpio_toggle(LED4_PORT, LED4_PIN);
     // wait for .5 second
     kb_delay_ms(500);
@@ -39,6 +58,9 @@ int main(void)
     kb_gpio_toggle(LED4_PORT, LED4_PIN);
     trace_puts("Hello ARM World!");
     kb_terminal_puts("Hello World!\r\n");
+
+
+    // motor_stop(CH_BOTH);
     uint32_t seconds = 0;
     while (1)
     {

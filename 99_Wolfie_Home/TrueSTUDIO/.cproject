@@ -61,9 +61,9 @@
 									<listOptionValue builtIn="false" value="../../../00_Manufacturer_Diver/STM32F4xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../../inc"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/system"/>
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/bsp/stm32f446xx-nucleo64"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/module"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
-									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/bsp/WolfieMouse"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.18338362" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1617601037" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F446RE" valueType="enumerated"/>
@@ -105,9 +105,9 @@
 									<listOptionValue builtIn="false" value="../../../00_Manufacturer_Diver/STM32F4xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../../inc"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/system"/>
+									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/bsp/stm32f446xx-nucleo64"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/module"/>
 									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/peripheral"/>
-									<listOptionValue builtIn="false" value="../../../00_KB_Embedded/bsp/WolfieMouse"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.2081609160" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1910215133" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F446RE" valueType="enumerated"/>
@@ -158,9 +158,9 @@
 					<sourceEntries>
 						<entry excluding="inc|Src|kb_lib|HAL_driver|startup" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="stm32f4xx_hal_msp_template.c|stm32f4xx_hal_timebase_rtc_alarm_template.c|stm32f4xx_hal_timebase_rtc_wakeup_template.c|stm32f4xx_hal_timebase_tim_template.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="HAL_driver"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="inc"/>
-						<entry excluding="linker_script/STM32F407VG_FLASH.ld|module/kb_terminal_test.c|bsp/stm32f407xx-discovery/|bsp/stm32f446xx-nucleo64/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="kb_lib"/>
+						<entry excluding="bsp/stm32f407xx-discovery/|bsp/WolfieMouse/|linker_script/STM32F407VG_FLASH.ld|module/kb_terminal_test.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="kb_lib"/>
 						<entry excluding="arm/|gcc/startup_stm32f401xc.S|gcc/startup_stm32f401xe.S|gcc/startup_stm32f405xx.S|gcc/startup_stm32f407xx.S|gcc/startup_stm32f410cx.S|gcc/startup_stm32f410rx.S|gcc/startup_stm32f410tx.S|gcc/startup_stm32f411xe.S|gcc/startup_stm32f412cx.S|gcc/startup_stm32f412rx.S|gcc/startup_stm32f412vx.S|gcc/startup_stm32f412zx.S|gcc/startup_stm32f415xx.S|gcc/startup_stm32f417xx.S|gcc/startup_stm32f427xx.S|gcc/startup_stm32f429xx.S|gcc/startup_stm32f437xx.S|gcc/startup_stm32f439xx.S|gcc/startup_stm32f469xx.S|gcc/startup_stm32f479xx.S|iar/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="startup"/>
 					</sourceEntries>
 				</configuration>
@@ -303,17 +303,17 @@
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1728391488;com.atollic.truestudio.exe.debug.1728391488.;com.atollic.truestudio.exe.debug.toolchain.gpp.366215526;com.atollic.truestudio.gpp.input.1757685868">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.configuration.release.1417318178;com.atollic.truestudio.configuration.release.1417318178.;com.atollic.truestudio.exe.release.toolchain.gcc.577937809;com.atollic.truestudio.gcc.input.340860934">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1728391488;com.atollic.truestudio.exe.debug.1728391488.;com.atollic.truestudio.exe.debug.toolchain.gcc.754278893;com.atollic.truestudio.gcc.input.1365259382">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.configuration.release.1417318178;com.atollic.truestudio.configuration.release.1417318178.;com.atollic.truestudio.exe.release.toolchain.gpp.1002808819;com.atollic.truestudio.gpp.input.160766355">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1728391488;com.atollic.truestudio.exe.debug.1728391488.;com.atollic.truestudio.exe.debug.toolchain.gpp.366215526;com.atollic.truestudio.gpp.input.1757685868">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1728391488;com.atollic.truestudio.exe.debug.1728391488.;com.atollic.truestudio.exe.debug.toolchain.gcc.754278893;com.atollic.truestudio.gcc.input.1365259382">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>
