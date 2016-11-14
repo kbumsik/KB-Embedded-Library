@@ -8,16 +8,21 @@
 #ifndef PERIPHERAL_KB_GPIO_H_
 #define PERIPHERAL_KB_GPIO_H_
 
-#include "kb_base.h"
+#include <kb_common_source.h>
 
 #if defined(STM32)
 	// typedefs
 	/* TODO: Think of a good design for GPIO */
-	typedef GPIO_TypeDef* 		kb_gpio_port_t;
-	typedef uint16_t 			kb_gpio_pin_t;
+    typedef void*   kb_gpio_port_t;
+    typedef uint16_t    kb_gpio_pin_t;
 	typedef GPIO_InitTypeDef 	kb_gpio_init_t;
 	typedef GPIO_PinState 		kb_gpio_state_t;
 	typedef	uint32_t			kb_gpio_pull_t;
+	typedef enum {
+	    RISING_EDGE,
+        FALLING_EDGE,
+        BOTH_EDGE
+	}kb_gpio_edge_t;
 	// Pull state
 	#define NOPULL		GPIO_NOPULL
 	#define PULLUP		GPIO_PULLUP
@@ -63,7 +68,8 @@ kb_gpio_state_t kb_gpio_read(kb_gpio_port_t port, kb_gpio_pin_t pin);
 void kb_gpio_set(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_state_t state);
 void kb_gpio_toggle(kb_gpio_port_t port, kb_gpio_pin_t pin);
 
-void kb_gpio_enable_clk(kb_gpio_port_t port);
+int kb_gpio_isr_enable(kb_gpio_port_t port, kb_gpio_pin_t pin,
+        kb_gpio_edge_t edge, void (*callback)(void));
 
 #ifdef __cplusplus
 }

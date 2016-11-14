@@ -5,7 +5,7 @@
  *      Author: Bumsik Kim
  */
 
-#include "kb_base.h"
+#include <kb_common_source.h>
 #include "kb_tick.h"
 #include "system_config.h"
 #include "faults.h"

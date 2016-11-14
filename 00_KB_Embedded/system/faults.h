@@ -8,10 +8,11 @@
 #ifndef FAULTS_H_
 #define FAULTS_H_
 
+#include <kb_common_source.h>
 #include <stdint.h>
 
-#if defined(DEBUG)
-#define __DEBUG_BKPT()  asm volatile ("bkpt 0")
+#if defined(KB_DEBUG)
+#define __DEBUG_BKPT()  __BKPT(0)
 #endif
 
 // ----------------------------------------------------------------------------
@@ -50,7 +51,7 @@ void UsageFault_Handler(void);
 #endif
   } ExceptionStackFrame;
 
-#if defined(TRACE)
+#if defined(KB_TRACE)
 #if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
 
   void dumpExceptionStack (ExceptionStackFrame* frame, uint32_t cfsr, uint32_t mmfar,

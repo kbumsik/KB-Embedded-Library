@@ -8,7 +8,7 @@
 #ifndef KB_TICK_H_
 #define KB_TICK_H_
 
-#include "kb_base.h"
+#include <kb_common_source.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,9 +26,9 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 	void 	 kb_tick_update_f_cpu_mhz(void);
 	#define	 kb_tick_init()
-	#define  kb_tick_inc_ms() 			HAL_IncTick()
-	#define  kb_tick_ms() 			HAL_GetTick()
-	#define  kb_delay_ms(delay_ms) HAL_Delay(delay_ms)
+	#define  kb_tick_inc_ms()       HAL_IncTick()
+	#define  kb_tick_ms()           HAL_GetTick()
+	#define  kb_delay_ms(delay_ms)  HAL_Delay(delay_ms)
 	uint32_t kb_tick_us(void);
 	void     kb_delay_us(volatile uint32_t delay_us);
 #endif

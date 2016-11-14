@@ -63,7 +63,7 @@
   * @{
   */
 
-
+#include "kb_config.h"
 #include "stm32f4xx.h"
 
 #if !defined  (HSE_VALUE) 

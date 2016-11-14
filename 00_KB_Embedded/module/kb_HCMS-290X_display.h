@@ -9,17 +9,17 @@
 #define _MODULE_HCMS_290X_DISPLAY_H_
 
 /* Includes */
-#include "kb_base.h"
+#include <kb_common_source.h>
 #include "kb_module_config.h"
 
 /*
  * Pin configureation
- * DIS_RS		:PC4	When 1: Select control register, When 0: Dot register
- * 						Value of RS is latched on the falling edge of ~CE input
- * ~DIS_RESET	:PC5
- * ~DIS_CE		:PA4	When 0: enable writing, When 1: Finish Writing
- * DIS_MOSI		:PA7
- * DIS_SCK		:PA5
+ * DIS_RS		When 1: Select control register, When 0: Dot register
+ * 					Value of RS is latched on the falling edge of ~CE input
+ * ~DIS_RESET
+ * ~DIS_CE		When 0: enable writing, When 1: Finish Writing
+ * DIS_MOSI
+ * DIS_SCK
  */
 #ifndef HCMS_290X_SPI
 	#define HCMS_290X_SPI			SPI2

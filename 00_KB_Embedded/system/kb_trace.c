@@ -5,10 +5,9 @@
 
 // ----------------------------------------------------------------------------
 
-#if defined(TRACE)
 
-#include "kb_base.h"
-#include "trace.h"
+#include <kb_common_source.h>
+#include "kb_trace.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -16,6 +15,7 @@
 #define OS_INTEGER_TRACE_PRINTF_TMP_ARRAY_SIZE (128)
 #endif
 
+#if defined(KB_TRACE)
 // ----------------------------------------------------------------------------
 
 int

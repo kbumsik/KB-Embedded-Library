@@ -9,11 +9,12 @@
 #define PERIPHERAL_KB_UART_H_
 
 /* Includes */
-#include "kb_base.h"
+#include "kb_common_header.h"
 #include "kb_gpio.h"
 
+
 #if defined(STM32)
-	typedef USART_TypeDef* kb_uart_t;
+    typedef void* kb_uart_t;
 #else
 	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif

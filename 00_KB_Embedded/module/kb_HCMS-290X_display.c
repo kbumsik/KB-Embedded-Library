@@ -1,5 +1,5 @@
+#include <kb_common_source.h>
 #include "kb_HCMS-290X_display.h"
-#include "kb_base.h"
 #include "kb_spi.h"
 #include "kb_tick.h"
 #include <stdio.h>

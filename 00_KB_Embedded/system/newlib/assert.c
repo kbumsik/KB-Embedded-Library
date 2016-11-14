@@ -4,10 +4,10 @@
 //
 
 #include <assert.h>
+#include <kb_trace.h>
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "../trace.h"
 
 // ----------------------------------------------------------------------------
 

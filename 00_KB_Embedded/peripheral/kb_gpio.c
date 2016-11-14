@@ -5,6 +5,7 @@
  *      Author: Bumsik Kim
  */
 
+#include "kb_common_source.h"
 #include "kb_gpio.h"
 
 // base name change. Used with kb_msg(). See @kb_base.h
@@ -76,7 +77,7 @@ void kb_gpio_enable_clk(kb_gpio_port_t port)
 	}
 	else
 	{
-		kb_error("Wrong port selected for clock!\r\n");
+		KB_DEBUG_ERROR("Wrong port selected for clock!\r\n");
 	}
 	return;
 }

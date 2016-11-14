@@ -1,8 +1,7 @@
+#include "kb_trace.h"
 #include "kb_tick.h"
-#include "main.h"
 // KB library
 #include "system_config.h"
-#include "trace.h"
 #include "kb_gpio.h"
 #include "kb_HCMS-290X_display.h"
 #include "kb_terminal.h"

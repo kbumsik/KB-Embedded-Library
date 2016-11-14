@@ -4,11 +4,11 @@
  *  Created on: Oct 20, 2016
  *      Author: Bumsik Kim
  */
-
-#include <faults.h>
+#include <kb_trace.h>
+#include "kb_config.h"
+#include "faults.h"
 #include "stm32f4xx.h"
 #include "semihosting.h"
-#include "trace.h"
 #include <string.h>
 
 void enable_faults(void)
@@ -36,7 +36,7 @@ void enable_faults(void)
 
 void NMI_Handler (void)
 {
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)
@@ -46,7 +46,7 @@ void NMI_Handler (void)
 
 // ----------------------------------------------------------------------------
 
-#if defined(TRACE)
+#if defined(KB_TRACE)
 
 #if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
 
@@ -321,7 +321,7 @@ void HardFault_Handler (void)
 void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
                      uint32_t lr __attribute__((unused)))
 {
-#if defined(TRACE)
+#if defined(KB_TRACE)
   uint32_t mmfar = SCB->MMFAR; // MemManage Fault Address
   uint32_t bfar = SCB->BFAR; // Bus Fault Address
   uint32_t cfsr = SCB->CFSR; // Configurable Fault Status Registers
@@ -349,7 +349,7 @@ void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
 
 #endif
 
-#if defined(TRACE)
+#if defined(KB_TRACE)
   trace_printf ("[HardFault]\n");
   dumpExceptionStack (frame, cfsr, mmfar, bfar, lr);
 #endif // defined(TRACE)
@@ -402,12 +402,12 @@ void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
   // There is no semihosting support for Cortex-M0, since on ARMv6-M
   // faults are fatal and it is not possible to return from the handler.
 
-#if defined(TRACE)
+#if defined(KB_TRACE)
   trace_printf ("[HardFault]\n");
   dumpExceptionStack (frame, lr);
 #endif // defined(TRACE)
 
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)
@@ -422,7 +422,7 @@ void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
 
 void MemManage_Handler (void)
 {
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)
@@ -450,7 +450,7 @@ void BusFault_Handler (void)
 void BusFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
                     uint32_t lr __attribute__((unused)))
 {
-#if defined(TRACE)
+#if defined(KB_TRACE)
   uint32_t mmfar = SCB->MMFAR; // MemManage Fault Address
   uint32_t bfar = SCB->BFAR; // Bus Fault Address
   uint32_t cfsr = SCB->CFSR; // Configurable Fault Status Registers
@@ -459,7 +459,7 @@ void BusFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
   dumpExceptionStack (frame, cfsr, mmfar, bfar, lr);
 #endif // defined(TRACE)
 
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)
@@ -487,7 +487,7 @@ void UsageFault_Handler (void)
 void UsageFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
                       uint32_t lr __attribute__((unused)))
 {
-#if defined(TRACE)
+#if defined(KB_TRACE)
   uint32_t mmfar = SCB->MMFAR; // MemManage Fault Address
   uint32_t bfar = SCB->BFAR; // Bus Fault Address
   uint32_t cfsr = SCB->CFSR; // Configurable Fault Status Registers
@@ -506,12 +506,12 @@ void UsageFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
 
 #endif
 
-#if defined(TRACE)
+#if defined(KB_TRACE)
   trace_printf ("[UsageFault]\n");
   dumpExceptionStack (frame, cfsr, mmfar, bfar, lr);
 #endif // defined(TRACE)
 
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)

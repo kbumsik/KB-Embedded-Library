@@ -9,7 +9,7 @@
 #define MODULE_KB_TERMINAL_H_
 
 /* Includes */
-#include "kb_base.h"
+#include <kb_common_source.h>
 #include "kb_module_config.h"
 
 #ifndef TERMINAL_UART	// STM32 NUCLEO64 default
@@ -36,9 +36,9 @@ int kb_terminal_init(void);
 int kb_terminal_puts(char *str);
 char *kb_terminal_gets(char *str);
 #define kb_terminal_printf(format, ... ) do {\
-							sprintf(kb_terminal_tx_buffer, format, ##__VA_ARGS__); \
-							kb_terminal_puts(kb_terminal_tx_buffer); \
-							} while(0)
+						sprintf(kb_terminal_tx_buffer, format, ##__VA_ARGS__); \
+						kb_terminal_puts(kb_terminal_tx_buffer); \
+						} while(0)
 
 #ifdef __cplusplus
 }

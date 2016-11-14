@@ -8,7 +8,7 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-#include "kb_base.h"
+#include "kb_common_source.h"
 
 typedef enum {
 	CH_RIGHT = 0x0,

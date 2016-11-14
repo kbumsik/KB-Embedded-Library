@@ -6,6 +6,7 @@
  */
 
 #include "encoder.h"
+#include "kb_common_source.h"
 #include "kb_timer.h"
 
 void encoder_init(void)

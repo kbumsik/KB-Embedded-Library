@@ -43,8 +43,8 @@ int main(void)
     encoder_init();
     int left = encoder_left_count();
     int right = encoder_right_count();
-    kb_msg("left encoder: %d\r\n", left);
-    kb_msg("right encoder: %d\r\n", right);
+    KB_DEBUG_MSG("left encoder: %d\r\n", left);
+    KB_DEBUG_MSG("right encoder: %d\r\n", right);
 
     // init motor
     motor_init();

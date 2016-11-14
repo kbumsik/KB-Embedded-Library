@@ -5,6 +5,7 @@
  *      Author: Bumsik Kim
  */
 
+#include "kb_common_source.h"
 #include "kb_uart.h"
 #include "kb_alternate_pins.h"
 #include <string.h>
@@ -70,7 +71,7 @@ int kb_uart_init(kb_uart_t uart, uint32_t baud_rate)
     }
     else
     {
-    	return -1;
+    	return KB_ERROR;
     }
 
     handler->Init.BaudRate = baud_rate;
@@ -80,7 +81,10 @@ int kb_uart_init(kb_uart_t uart, uint32_t baud_rate)
     handler->Init.Mode = UART_MODE_TX_RX;
     handler->Init.HwFlowCtl = UART_HWCONTROL_NONE;
     handler->Init.OverSampling = UART_OVERSAMPLING_16;
-    return HAL_UART_Init(handler);
+
+    int8_t result = HAL_UART_Init(handler);
+    KB_CONVERT_STATUS(result);
+    return  (kb_status_t)result;
 }
 
 int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
@@ -88,7 +92,7 @@ int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gp
     uint32_t alternate = GPIO_USART_TX_AF_(uart, port, pin);
     if (alternate == KB_WRONG_PIN)
     {
-        return -1;
+        return KB_ERROR;
     }
     kb_gpio_enable_clk(port);
     // Init GPIO
@@ -99,7 +103,7 @@ int kb_uart_tx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gp
         .Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
     };
     kb_gpio_init(port, pin, &gpio_setting);
-    return 0;
+    return KB_OK;
 }
 
 int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
@@ -107,7 +111,7 @@ int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gp
     uint32_t alternate = GPIO_USART_RX_AF_(uart, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
-		return -1;
+		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
 	// Init GPIO
@@ -118,7 +122,7 @@ int kb_uart_rx_pin(kb_uart_t uart, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gp
 		.Speed = GPIO_SPEED_FREQ_VERY_HIGH // 50MHz
 	};
 	kb_gpio_init(port, pin, &gpio_setting);
-	return 0;
+	return KB_OK;
 }
 
 int kb_uart_send(kb_uart_t uart, uint8_t *buffer, uint16_t size, uint32_t timeout)
@@ -151,9 +155,12 @@ int kb_uart_send(kb_uart_t uart, uint8_t *buffer, uint16_t size, uint32_t timeou
     }
     else
     {
-    	return -1;
+    	return KB_ERROR;
     }
-    return HAL_UART_Transmit(handler, buffer, size, timeout);
+
+    int8_t result = HAL_UART_Transmit(handler, buffer, size, timeout);
+    KB_CONVERT_STATUS(result);
+    return  (kb_status_t)result;
 }
 
 int kb_uart_send_str(kb_uart_t uart, char *str, uint32_t timeout)
@@ -192,7 +199,10 @@ int kb_uart_receive(kb_uart_t uart, uint8_t *buffer, uint16_t size, uint32_t tim
     }
     else
     {
-    	return -1;
+    	return KB_ERROR;
     }
-	return HAL_UART_Receive(handler, buffer, size, 0);
+
+    int8_t result = HAL_UART_Receive(handler, buffer, size, 0);
+    KB_CONVERT_STATUS(result);
+    return  (kb_status_t)result;
 }

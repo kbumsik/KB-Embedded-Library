@@ -7,7 +7,7 @@
 #define DIAG_TRACE_H_
 
 // ----------------------------------------------------------------------------
-
+#include "kb_config.h"
 #include <unistd.h>
 
 // ----------------------------------------------------------------------------
@@ -34,39 +34,31 @@
 // compiled with #ifdef TRACE/#endif
 
 
-#if defined(TRACE)
+#if defined(KB_TRACE)
 
 #if defined(__cplusplus)
-extern "C"
-{
+extern "C" {
 #endif
 
-  void
-  trace_initialize(void);
+void trace_initialize(void);
 
-  // Implementation dependent
-  ssize_t
-  trace_write(const char* buf, size_t nbyte);
+// Implementation dependent
+ssize_t trace_write(const char* buf, size_t nbyte);
 
-  // ----- Portable -----
+// ----- Portable -----
+int trace_printf(const char* format, ...);
 
-  int
-  trace_printf(const char* format, ...);
+int trace_puts(const char *s);
 
-  int
-  trace_puts(const char *s);
+int trace_putchar(int c);
 
-  int
-  trace_putchar(int c);
-
-  void
-  trace_dump_args(int argc, char* argv[]);
+void trace_dump_args(int argc, char* argv[]);
 
 #if defined(__cplusplus)
 }
 #endif
 
-#else // !defined(TRACE)
+#elif !defined(TRACE)
 
 #if defined(__cplusplus)
 extern "C"
@@ -139,7 +131,9 @@ trace_dump_args(int argc __attribute__((unused)),
 {
 }
 
-#endif // defined(TRACE)
+#else // what the hack
+    #error "What just happen here?"
+#endif
 
 // ----------------------------------------------------------------------------
 

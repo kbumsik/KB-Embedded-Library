@@ -5,6 +5,7 @@
  *      Author: Bumsik Kim
  */
 
+#include "kb_common_source.h"
 #include "kb_spi.h"
 #include "kb_alternate_pins.h"
 
@@ -69,15 +70,15 @@ int kb_spi_init(kb_spi_t spi, kb_spi_init_t *settings)
 	{
 		prescale_idx = front;
 		prescale_matched = prescaler_table_[prescale_idx].divisor;
-		kb_warning("Prescaler is touching its border vale\r\n");
-		kb_warning("	You might want to double check\r\n");
+		KB_DEBUG_WARNING("Prescaler is touching its border vale\r\n");
+		KB_DEBUG_WARNING("	You might want to double check\r\n");
 	}
 	else if (prescale_target <= prescaler_table_[0].divisor)
 	{
 		prescale_idx = 0;
 		prescale_matched = prescaler_table_[prescale_idx].divisor;
-		kb_warning("Prescaler is touching its border value");
-		kb_warning("	You might want to double check\r\n");
+		KB_DEBUG_WARNING("Prescaler is touching its border value");
+		KB_DEBUG_WARNING("	You might want to double check\r\n");
 	}
 	else
 	{
@@ -100,9 +101,9 @@ int kb_spi_init(kb_spi_t spi, kb_spi_init_t *settings)
 			}
 		}
 	}
-	kb_msg("requested frequency :%lu\r\n", (unsigned long int)settings->frequency);
-	kb_msg("selected divisor is %u\r\n", (unsigned int)prescaler_table_[prescale_idx].divisor);
-	kb_msg("selected frequency is %lu\r\n", (unsigned long int)freq_bus/prescale_matched);
+	KB_DEBUG_MSG("requested frequency :%lu\r\n", (unsigned long int)settings->frequency);
+	KB_DEBUG_MSG("selected divisor is %u\r\n", (unsigned int)prescaler_table_[prescale_idx].divisor);
+	KB_DEBUG_MSG("selected frequency is %lu\r\n", (unsigned long int)freq_bus/prescale_matched);
 
 	handler->Init.BaudRatePrescaler = prescaler_table_[prescale_idx].divisor_macro;
 
@@ -126,16 +127,17 @@ int kb_spi_init(kb_spi_t spi, kb_spi_init_t *settings)
 		handler->Init.CLKPolarity = SPI_POLARITY_LOW;
 		break;
 	default:
-		kb_error("Wrong Polarity selected!.\r\n");
+		KB_DEBUG_ERROR("Wrong Polarity selected!.\r\n");
 		return KB_ERROR;
 	}
 
-	kb_status_t result = HAL_SPI_Init(handler);;
-	if (result != KB_OK)
+    int8_t status = HAL_SPI_Init(handler);
+    KB_CONVERT_STATUS(status);
+	if (status != KB_OK)
 	{
-		kb_error("Error initializing.\r\n");
+		KB_DEBUG_ERROR("Error initializing.\r\n");
 	}
-	return	result;
+	return	status;
 }
 
 
@@ -144,7 +146,7 @@ int kb_spi_mosi_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpi
 	uint32_t alternate = GPIO_SPI_MOSI_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
-		kb_error("Wrong MOSI pin! Find a correct one.\r\n");
+		KB_DEBUG_ERROR("Wrong MOSI pin! Find a correct one.\r\n");
 		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
@@ -165,7 +167,7 @@ int kb_spi_miso_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpi
 	uint32_t alternate = GPIO_SPI_MISO_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
-		kb_error("Wrong MISO pin! Find a correct one.\r\n");
+		KB_DEBUG_ERROR("Wrong MISO pin! Find a correct one.\r\n");
 		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
@@ -186,7 +188,7 @@ int kb_spi_sck_pin(kb_spi_t spi, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio
 	uint32_t alternate = GPIO_SPI_SCK_AF_(spi, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
-		kb_error("Wrong SCK pin! Find a correct one.\r\n");
+		KB_DEBUG_ERROR("Wrong SCK pin! Find a correct one.\r\n");
 		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
@@ -215,11 +217,13 @@ int kb_spi_send_timeout(kb_spi_t spi, uint8_t *buf, uint16_t size, uint32_t time
 	if (NULL == handler) {
 		return KB_ERROR;
 	}
-	kb_status_t result = HAL_SPI_Transmit(handler, buf, size, timeout);
-	if (result != KB_OK) {
-		kb_error("Error in sending.\r\n");
+
+    int8_t status = HAL_SPI_Transmit(handler, buf, size, timeout);
+    KB_CONVERT_STATUS(status);
+	if (status != KB_OK) {
+		KB_DEBUG_ERROR("Error in sending.\r\n");
 	}
-	return result;
+	return status;
 }
 
 
@@ -236,11 +240,13 @@ int kb_spi_receive_timeout(kb_spi_t spi, uint8_t *buf, uint16_t size, uint32_t t
 	if (NULL == handler) {
 		return KB_ERROR;
 	}
-	kb_status_t result = HAL_SPI_Receive(handler, buf, size, timeout);
-	if (result != KB_OK) {
-		kb_error("Error in sending.\r\n");
-	}
-	return result;
+
+    int8_t status = HAL_SPI_Receive(handler, buf, size, timeout);
+    KB_CONVERT_STATUS(status);
+    if (status != KB_OK) {
+        KB_DEBUG_ERROR("Error in receiving.\r\n");
+    }
+    return status;
 }
 
 
@@ -258,11 +264,13 @@ int kb_spi_sendreceive_timeout(kb_spi_t spi, uint8_t *tx_buf, uint8_t *rx_buf, u
 	if (NULL == handler) {
 		return KB_ERROR;
 	}
-	kb_status_t result = HAL_SPI_TransmitReceive(handler, tx_buf, rx_buf, size, timeout);
-	if (result != KB_OK) {
-		kb_error("Error in sending.\r\n");
-	}
-	return result;
+
+    int8_t status = HAL_SPI_TransmitReceive(handler, tx_buf, rx_buf, size, timeout);
+    KB_CONVERT_STATUS(status);
+    if (status != KB_OK) {
+        KB_DEBUG_ERROR("Error in sending/receiving.\r\n");
+    }
+    return status;
 }
 
 
@@ -276,7 +284,7 @@ static uint32_t get_bus_freq_(kb_spi_t spi)
 	{	// APB2: SPI1, SPI4
 		return HAL_RCC_GetPCLK2Freq();
 	}
-	kb_error("Wrong SPI device! Find a correct one.\r\n");
+	KB_DEBUG_ERROR("Wrong SPI device! Find a correct one.\r\n");
 	return 0;
 }
 
@@ -301,7 +309,7 @@ static SPI_HandleTypeDef *get_handler (kb_spi_t spi)
 	}
 	else
 	{
-		kb_error("Wrong SPI device selected!\r\n");
+		KB_DEBUG_ERROR("Wrong SPI device selected!\r\n");
 		return NULL;
 	}
 }
@@ -327,7 +335,7 @@ static void enable_spi_clk_ (kb_spi_t spi)
 	}
 	else
 	{
-		kb_error("Wrong SPI device selected!\r\n");
+		KB_DEBUG_ERROR("Wrong SPI device selected!\r\n");
 	}
 	return;
 }

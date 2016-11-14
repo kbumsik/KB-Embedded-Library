@@ -5,11 +5,11 @@
 
 // ----------------------------------------------------------------------------
 
-#if defined(TRACE)
 
-#include "kb_base.h"
-#include "trace.h"
+#include <kb_common_source.h>
+#include "kb_trace.h"
 
+#if defined(KB_TRACE)
 // ----------------------------------------------------------------------------
 
 // One of these definitions must be passed via the compiler command line

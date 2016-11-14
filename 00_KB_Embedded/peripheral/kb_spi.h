@@ -8,11 +8,11 @@
 #ifndef PERIPHERAL_KB_SPI_H_
 #define PERIPHERAL_KB_SPI_H_
 
-#include "kb_base.h"
+#include "kb_common_header.h"
 #include "kb_gpio.h"
 
 #if defined(STM32)
-	typedef SPI_TypeDef* kb_spi_t;
+    typedef void* kb_spi_t;
 #else
 	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif

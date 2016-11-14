@@ -5,6 +5,7 @@
  *      Author: Bumsik Kim
  */
 
+#include "kb_common_source.h"
 #include "kb_i2c.h"
 #include "kb_alternate_pins.h"
 
@@ -46,12 +47,13 @@ int kb_i2c_init(kb_i2c_t i2c, kb_i2c_init_t *settings)
 	handler->Init.GeneralCallMode = I2C_GENERALCALL_DISABLED;
 	handler->Init.NoStretchMode = I2C_NOSTRETCH_DISABLED;
 
-	kb_status_t result = HAL_I2C_Init(handler);;
-	if (result != KB_OK)
-	{
-		kb_error("Error initializing.\r\n");
-	}
-	return	result;
+    int8_t status = HAL_I2C_Init(handler);;
+    KB_CONVERT_STATUS(status);
+    if (status != KB_OK)
+    {
+        KB_DEBUG_ERROR("Error initializing.\r\n");
+    }
+    return  status;
 }
 
 
@@ -60,7 +62,7 @@ int kb_i2c_sda_pin(kb_i2c_t i2c, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio
 	uint32_t alternate = GPIO_I2C_SDA_AF_(i2c, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
-		kb_error("Wrong SDA pin! Find a correct one.\r\n");
+		KB_DEBUG_ERROR("Wrong SDA pin! Find a correct one.\r\n");
 		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
@@ -81,7 +83,7 @@ int kb_i2c_scl_pin(kb_i2c_t i2c, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio
 	uint32_t alternate = GPIO_I2C_SCL_AF_(i2c, port, pin);
 	if (alternate == KB_WRONG_PIN)
 	{
-		kb_error("Wrong SCL pin! Find a correct one.\r\n");
+		KB_DEBUG_ERROR("Wrong SCL pin! Find a correct one.\r\n");
 		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
@@ -113,11 +115,13 @@ int kb_i2c_send_timeout(kb_i2c_t i2c, uint16_t address_target, uint8_t* buf, uin
 	// target address is needed to be shit by 1
 	address_target <<= 1;
 
-	kb_status_t result = HAL_I2C_Master_Transmit(handler, address_target, buf, size, timeout);
-	if (result != KB_OK) {
-		kb_error("Error in sending.\r\n");
-	}
-	return result;
+    int8_t status = HAL_I2C_Master_Transmit(handler, address_target, buf, size, timeout);
+    KB_CONVERT_STATUS(status);
+    if (status != KB_OK)
+    {
+        KB_DEBUG_ERROR("Error in sending.\r\n");
+    }
+    return  status;
 }
 
 
@@ -137,11 +141,13 @@ int kb_i2c_receive_timeout(kb_i2c_t i2c, uint16_t address_target, uint8_t* buf, 
 	// target address is needed to be shit by 1
 	address_target <<= 1;
 
-	kb_status_t result = HAL_I2C_Master_Receive(handler, address_target, buf, size, timeout);
-	if (result != KB_OK) {
-		kb_error("Error in sending.\r\n");
-	}
-	return result;
+    int8_t status = HAL_I2C_Master_Receive(handler, address_target, buf, size, timeout);
+    KB_CONVERT_STATUS(status);
+    if (status != KB_OK)
+    {
+        KB_DEBUG_ERROR("Error in sending.\r\n");
+    }
+    return  status;
 }
 
 
@@ -161,7 +167,7 @@ static I2C_HandleTypeDef *get_handler (kb_i2c_t i2c)
 	}
 	else
 	{
-		kb_error("Wrong I2C device selected!\r\n");
+		KB_DEBUG_ERROR("Wrong I2C device selected!\r\n");
 		return NULL;
 	}
 }
@@ -183,7 +189,7 @@ static void enable_i2c_clk_ (kb_i2c_t i2c)
 	}
 	else
 	{
-		kb_error("Wrong I2C device selected!\r\n");
+		KB_DEBUG_ERROR("Wrong I2C device selected!\r\n");
 	}
 	return;
 }

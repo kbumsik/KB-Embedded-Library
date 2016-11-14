@@ -88,7 +88,7 @@ int32_t  vl6180x_range_mm(void)
     }
     else
     {
-    	kb_msg("Range error msg:%lu", Range.errorStatus);
+    	KB_DEBUG_MSG("Range error msg:%lu", Range.errorStatus);
     }
     return Range.range_mm;
 }
@@ -104,7 +104,7 @@ uint32_t vl6180x_als_lux(void)
     }
     else
     {
-    	kb_msg("ALS error msg:%lu", Als.errorStatus);
+    	KB_DEBUG_MSG("ALS error msg:%lu", Als.errorStatus);
     }
     return Als.lux;
 }
@@ -137,7 +137,7 @@ int32_t  vl6180x_freerun_range_mm(void)
             }
             else
             {
-            	kb_msg("Range error msg:%lu", Range.errorStatus);
+            	KB_DEBUG_MSG("Range error msg:%lu", Range.errorStatus);
             }
             /* re-arm next measurement */
             VL6180x_RangeStartSingleShot(dev_addr_);
@@ -145,7 +145,7 @@ int32_t  vl6180x_freerun_range_mm(void)
             // Then return
             if(WaitedLoop > 0)
             {
-            	kb_msg("%d loops waited", WaitedLoop);
+            	KB_DEBUG_MSG("%d loops waited", WaitedLoop);
             }
             WaitedLoop=0;
             return Range.range_mm;
@@ -157,7 +157,7 @@ int32_t  vl6180x_freerun_range_mm(void)
         }
         else if( status <0 )
         {
-        	kb_error("Critical Error:%d", status);
+        	KB_DEBUG_ERROR("Critical Error:%d", status);
         	return 0;
         }
     } while (1); // your code to stop looping

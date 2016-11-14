@@ -5,7 +5,7 @@
  *      Author: Bumsik Kim
  */
 
-#include "kb_base.h"
+#include "kb_common_source.h"
 #include "kb_timer.h"
 #include "kb_alternate_pins.h"
 
@@ -20,20 +20,20 @@ static TIM_HandleTypeDef *get_handler (kb_timer_t timer);
 static void enable_timer_clk_ (kb_timer_t timer);
 
 #if defined(STM32F446xx)
-	static TIM_HandleTypeDef timer_1_h_ = {.Instance = TIMER1};
-	static TIM_HandleTypeDef timer_2_h_ = {.Instance = TIMER2};
-	static TIM_HandleTypeDef timer_3_h_ = {.Instance = TIMER3};
-	static TIM_HandleTypeDef timer_4_h_ = {.Instance = TIMER4};
-	static TIM_HandleTypeDef timer_5_h_ = {.Instance = TIMER5};
-	static TIM_HandleTypeDef timer_6_h_ = {.Instance = TIMER6};
-	static TIM_HandleTypeDef timer_7_h_ = {.Instance = TIMER7};
-	static TIM_HandleTypeDef timer_8_h_ = {.Instance = TIMER8};
-	static TIM_HandleTypeDef timer_9_h_ = {.Instance = TIMER9};
-	static TIM_HandleTypeDef timer_10_h_ = {.Instance = TIMER10};
-	static TIM_HandleTypeDef timer_11_h_ = {.Instance = TIMER11};
-	static TIM_HandleTypeDef timer_12_h_ = {.Instance = TIMER12};
-	static TIM_HandleTypeDef timer_13_h_ = {.Instance = TIMER13};
-	static TIM_HandleTypeDef timer_14_h_ = {.Instance = TIMER14};
+	static TIM_HandleTypeDef timer_1_h_ = {.Instance = TIM1};
+	static TIM_HandleTypeDef timer_2_h_ = {.Instance = TIM2};
+	static TIM_HandleTypeDef timer_3_h_ = {.Instance = TIM3};
+	static TIM_HandleTypeDef timer_4_h_ = {.Instance = TIM4};
+	static TIM_HandleTypeDef timer_5_h_ = {.Instance = TIM5};
+	static TIM_HandleTypeDef timer_6_h_ = {.Instance = TIM6};
+	static TIM_HandleTypeDef timer_7_h_ = {.Instance = TIM7};
+	static TIM_HandleTypeDef timer_8_h_ = {.Instance = TIM8};
+	static TIM_HandleTypeDef timer_9_h_ = {.Instance = TIM9};
+	static TIM_HandleTypeDef timer_10_h_ = {.Instance = TIM10};
+	static TIM_HandleTypeDef timer_11_h_ = {.Instance = TIM11};
+	static TIM_HandleTypeDef timer_12_h_ = {.Instance = TIM12};
+	static TIM_HandleTypeDef timer_13_h_ = {.Instance = TIM13};
+	static TIM_HandleTypeDef timer_14_h_ = {.Instance = TIM14};
 #else
 	#error "Please define device!"
 #endif
@@ -41,28 +41,33 @@ static void enable_timer_clk_ (kb_timer_t timer);
 
 int kb_timer_ch_pin(kb_timer_t timer, kb_timer_ch_t channel, kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_pull_t pull)
 {
+    TIM_HandleTypeDef* handler = get_handler(timer);
+    if (NULL == handler)
+    {
+        return KB_ERROR;
+    }
 	uint32_t alternate;
 	switch (channel)
 	{
 	case CH_1:
-		alternate = GPIO_TIM_CH1_AF_(timer, port, pin);
+		alternate = GPIO_TIM_CH1_AF_(handler->Instance, port, pin);
 		break;
 	case CH_2:
-		alternate = GPIO_TIM_CH2_AF_(timer, port, pin);
+		alternate = GPIO_TIM_CH2_AF_(handler->Instance, port, pin);
 		break;
 	case CH_3:
-		alternate = GPIO_TIM_CH3_AF_(timer, port, pin);
+		alternate = GPIO_TIM_CH3_AF_(handler->Instance, port, pin);
 		break;
 	case CH_4:
-		alternate = GPIO_TIM_CH4_AF_(timer, port, pin);
+		alternate = GPIO_TIM_CH4_AF_(handler->Instance, port, pin);
 		break;
 	default:
-		kb_error("Choose correct channel!\r\n");
+		KB_DEBUG_ERROR("Choose correct channel!\r\n");
 		return KB_ERROR;
 	}
 	if (alternate == KB_WRONG_PIN)
 	{
-		kb_error("Wrong MOSI pin! Find a correct one.\r\n");
+		KB_DEBUG_ERROR("Wrong MOSI pin! Find a correct one.\r\n");
 		return KB_ERROR;
 	}
 	kb_gpio_enable_clk(port);
@@ -113,17 +118,19 @@ int kb_pwm_init(kb_timer_t timer, kb_pwm_init_t *settings)
 			freq = (get_bus_freq_(timer)>>1)/(handler->Init.Prescaler + 1);
 		}
 	}
-	kb_msg("Requested clock freq: %lu\r\n", settings->clock_frequency);
-	kb_msg("Requested pluse freq: %lu\r\n", settings->clock_frequency/settings->period);
-	kb_msg("Selected clock freq: %lu\r\n", freq);
-	kb_msg("Selected pulse freq: %lu\r\n", freq/handler->Init.Period);
+	KB_DEBUG_MSG("Requested clock freq: %lu\r\n", settings->clock_frequency);
+	KB_DEBUG_MSG("Requested pluse freq: %lu\r\n", settings->clock_frequency/settings->period);
+	KB_DEBUG_MSG("Selected clock freq: %lu\r\n", freq);
+	KB_DEBUG_MSG("Selected pulse freq: %lu\r\n", freq/handler->Init.Period);
 	// good to go
-	kb_status_t status = HAL_TIM_PWM_Init(handler);
+
+    int8_t status = HAL_TIM_PWM_Init(handler);
+    KB_CONVERT_STATUS(status);
 	if(KB_OK != status)
 	{
-		kb_warning("Error init timer device!\r\n");
+		KB_DEBUG_WARNING("Error init timer device!\r\n");
 	}
-	return status;
+    return  (kb_status_t)status;
 }
 
 
@@ -153,19 +160,20 @@ int kb_pwm_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t duty_cycl
 	// setting duty cycle
 	if(duty_cycle_permyriad > 10000)
 	{
-		kb_warning("Duty cycle is > 10,000 permyriad.\r\n");
+		KB_DEBUG_WARNING("Duty cycle is > 10,000 permyriad.\r\n");
 		duty_cycle_permyriad = 10000;
 	}
 	uint16_t period = handler->Init.Period;
 	uint16_t pulse_width = ((uint32_t)period * duty_cycle_permyriad)/10000;
 	config.Pulse = pulse_width;
 
-	kb_status_t status = HAL_TIM_PWM_ConfigChannel(handler, &config, channel);
-	if(KB_OK != status)
-	{
-		kb_warning("Error setting PWM ch!\r\n");
-	}
-	return status;
+    int8_t status = HAL_TIM_PWM_ConfigChannel(handler, &config, channel);
+    KB_CONVERT_STATUS(status);
+    if(KB_OK != status)
+    {
+        KB_DEBUG_WARNING("Error setting PWM ch!\r\n");
+    }
+    return  (kb_status_t)status;
 }
 
 
@@ -178,10 +186,30 @@ int kb_pwm_start(kb_timer_t timer, kb_timer_ch_t channel)
 		return KB_ERROR;
 	}
 
-	kb_status_t status = HAL_TIM_PWM_Start(handler, channel);
+    int8_t status;
+    switch (channel)
+    {
+    case CH_1:
+        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_1);
+        break;
+    case CH_2:
+        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_2);
+        break;
+    case CH_3:
+        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_3);
+        break;
+    case CH_4:
+        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_4);
+        break;
+    default:
+        KB_DEBUG_ERROR("Choose correct channel!\r\n");
+        return KB_ERROR;
+    }
+
+    KB_CONVERT_STATUS(status);
 	if(KB_OK != status)
 	{
-		kb_warning("Error starting PWM ch!\r\n");
+		KB_DEBUG_WARNING("Error starting PWM ch!\r\n");
 	}
 	return status;
 }
@@ -196,10 +224,29 @@ int kb_pwm_stop(kb_timer_t timer, kb_timer_ch_t channel)
 		return KB_ERROR;
 	}
 
-	kb_status_t status = HAL_TIM_PWM_Stop(handler, channel);
+    int8_t status;
+    switch (channel)
+    {
+    case CH_1:
+        status = HAL_TIM_PWM_Stop(handler, TIM_CHANNEL_1);
+        break;
+    case CH_2:
+        status = HAL_TIM_PWM_Stop(handler, TIM_CHANNEL_2);
+        break;
+    case CH_3:
+        status = HAL_TIM_PWM_Stop(handler, TIM_CHANNEL_3);
+        break;
+    case CH_4:
+        status = HAL_TIM_PWM_Stop(handler, TIM_CHANNEL_4);
+        break;
+    default:
+        KB_DEBUG_ERROR("Choose correct channel!\r\n");
+        return KB_ERROR;
+    }
+    KB_CONVERT_STATUS(status);
 	if(KB_OK != status)
 	{
-		kb_warning("Error stopping PWM ch!\r\n");
+		KB_DEBUG_WARNING("Error stopping PWM ch!\r\n");
 	}
 	return status;
 }
@@ -252,13 +299,14 @@ int kb_encoder_init(kb_timer_t timer, kb_encoder_init_t *setting)
 		encoder_config.IC2Filter = 0xf;
 		break;
 	default:
-		kb_error("Incorrect encoder direction");
+		KB_DEBUG_ERROR("Incorrect encoder direction");
 	}
 
-	kb_status_t status = HAL_TIM_Encoder_Init(handler, &encoder_config);
+    int8_t status = HAL_TIM_Encoder_Init(handler, &encoder_config);
+    KB_CONVERT_STATUS(status);
 	if(KB_OK != status)
 	{
-		kb_warning("Error init encoder!\r\n");
+		KB_DEBUG_WARNING("Error init encoder!\r\n");
 	}
 	return status;
 }
@@ -273,10 +321,11 @@ int kb_encoder_start(kb_timer_t timer)
 		return KB_ERROR;
 	}
 
-	kb_status_t status = HAL_TIM_Encoder_Start(handler, TIM_CHANNEL_ALL);
+    int8_t status = HAL_TIM_Encoder_Start(handler, TIM_CHANNEL_ALL);
+    KB_CONVERT_STATUS(status);
 	if(KB_OK != status)
 	{
-		kb_warning("Error starting Encoder!\r\n");
+		KB_DEBUG_WARNING("Error starting Encoder!\r\n");
 	}
 	return status;
 }
@@ -291,10 +340,11 @@ int kb_encoder_stop(kb_timer_t timer)
 		return KB_ERROR;
 	}
 
-	kb_status_t status = HAL_TIM_Encoder_Stop(handler, TIM_CHANNEL_ALL);
+    int8_t status = HAL_TIM_Encoder_Stop(handler, TIM_CHANNEL_ALL);
+    KB_CONVERT_STATUS(status);
 	if(KB_OK != status)
 	{
-		kb_warning("Error stopping Encoder!\r\n");
+		KB_DEBUG_WARNING("Error stopping Encoder!\r\n");
 	}
 	return status;
 }
@@ -348,7 +398,7 @@ static uint32_t get_bus_freq_(kb_timer_t timer)
 		}
 		return HAL_RCC_GetPCLK2Freq() * timer_multiplier;
 	}
-	kb_error("Wrong TIM device! Find a correct one.\r\n");
+	KB_DEBUG_ERROR("Wrong TIM device! Find a correct one.\r\n");
 	return 0;
 }
 
@@ -413,7 +463,7 @@ static TIM_HandleTypeDef *get_handler (kb_timer_t timer)
 	}
 	else
 	{
-		kb_error("Wrong Timer device selected!\r\n");
+		KB_DEBUG_ERROR("Wrong Timer device selected!\r\n");
 		return NULL;
 	}
 }
@@ -479,7 +529,7 @@ static void enable_timer_clk_ (kb_timer_t timer)
 	}
 	else
 	{
-		kb_error("Wrong Timer device!\r\n");
+		KB_DEBUG_ERROR("Wrong Timer device!\r\n");
 	}
 	return;
 }

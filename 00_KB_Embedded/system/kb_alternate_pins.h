@@ -8,7 +8,7 @@
 #ifndef BSP_STM32F446XX_NUCLEO64_KB_ALTERNATE_PINS_H_
 #define BSP_STM32F446XX_NUCLEO64_KB_ALTERNATE_PINS_H_
 
-#include "kb_base.h"
+#include "kb_config.h"
 
 #define KB_WRONG_PIN	0xFFU
 

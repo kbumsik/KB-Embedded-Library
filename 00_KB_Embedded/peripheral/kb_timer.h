@@ -9,30 +9,31 @@
 #define PERIPHERAL_KB_TIMER_H_
 
 /* Includes */
-#include "kb_base.h"
+#include "kb_common_header.h"
 #include "kb_gpio.h"
 
 #if defined(STM32)
-	typedef TIM_TypeDef* kb_timer_t;
-	#define TIMER1	TIM1
-	#define TIMER2	TIM2
-	#define TIMER3	TIM3
-	#define TIMER4	TIM4
-	#define TIMER5	TIM5
-	#define TIMER6	TIM6
-	#define TIMER7	TIM7
-	#define TIMER8	TIM8
-	#define TIMER9	TIM9
-	#define TIMER10	TIM10
-	#define TIMER11	TIM11
-	#define TIMER12	TIM12
-	#define TIMER13	TIM13
-	#define TIMER14	TIM14
+    typedef enum{
+		TIMER1,
+		TIMER2,
+		TIMER3,
+		TIMER4,
+		TIMER5,
+		TIMER6,
+		TIMER7,
+		TIMER8,
+		TIMER9,
+		TIMER10,
+		TIMER11,
+		TIMER12,
+		TIMER13,
+		TIMER14
+	}kb_timer_t;
 	typedef enum{
-		CH_1 = TIM_CHANNEL_1,
-		CH_2 = TIM_CHANNEL_2,
-		CH_3 = TIM_CHANNEL_3,
-		CH_4 = TIM_CHANNEL_4,
+		CH_1 = 0x01U,
+		CH_2 = 0x02U,
+		CH_3 = 0x03U,
+		CH_4 = 0x04U,
 	}kb_timer_ch_t;
 	typedef enum{
 		CW,

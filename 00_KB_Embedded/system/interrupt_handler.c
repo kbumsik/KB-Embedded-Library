@@ -15,7 +15,7 @@
 
 void DebugMon_Handler (void)
 {
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)
@@ -27,7 +27,7 @@ void DebugMon_Handler (void)
 
 void PendSV_Handler (void)
 {
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)
@@ -37,7 +37,7 @@ void PendSV_Handler (void)
 
 void SVC_Handler (void)
 {
-#if defined(DEBUG)
+#if defined(KB_DEBUG)
   __DEBUG_BKPT();
 #endif
   while (1)

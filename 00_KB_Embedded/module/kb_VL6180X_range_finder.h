@@ -8,7 +8,7 @@
 #ifndef MODULE_KB_VL6180X_RANGE_FINDER_H_
 #define MODULE_KB_VL6180X_RANGE_FINDER_H_
 
-#include "kb_base.h"
+#include <kb_common_source.h>
 #include "kb_module_config.h"
 
 #ifndef VL6180X_I2C

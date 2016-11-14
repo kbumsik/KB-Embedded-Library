@@ -9,7 +9,7 @@
 #define MODULE_KB_TCA9545A_I2C_MUX_H_
 
 
-#include "kb_base.h"
+#include <kb_common_source.h>
 #include "kb_module_config.h"
 
 #ifndef TCA9545A_I2C

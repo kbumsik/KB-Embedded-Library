@@ -8,12 +8,13 @@
 #ifndef PERIPHERAL_KB_I2C_H_
 #define PERIPHERAL_KB_I2C_H_
 
-#include "kb_base.h"
+#include "kb_common_header.h"
 #include "kb_gpio.h"
 
+
 #if defined(STM32)
-	typedef I2C_TypeDef* kb_i2c_t;
 #else
+    typedef void* kb_i2c_t;
 	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif
 

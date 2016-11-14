@@ -55,7 +55,7 @@ int tca9545a_select_ch(uint8_t ch)
 {
 	if(ch > 0x0F)
 	{
-		kb_error("Wrong channel\r\n");
+		KB_DEBUG_ERROR("Wrong channel\r\n");
 		return -1;
 	}
 	int result = write_(ch);
@@ -105,7 +105,7 @@ static int write_(uint8_t input)
 {
 	while (KB_OK != kb_i2c_send_timeout(TCA9545A_I2C, ADDR_, &input, 1, TIMEOUT_))
 	{
-		kb_error("TCA9545 not found! retry\n");
+		KB_DEBUG_ERROR("TCA9545 not found! retry\n");
 		if (0 == tca9545a_init())
 		{
 			continue;
@@ -125,10 +125,10 @@ static uint8_t read_(void)
 		retry++;
 		if (retry > RETRY_)
 		{
-			kb_error("Failed to connect TCA9545!\n");
+			KB_DEBUG_ERROR("Failed to connect TCA9545!\n");
 			return 0;
 		}
-		kb_error("TCA9545A not found! retry\n");
+		KB_DEBUG_ERROR("TCA9545A not found! retry\n");
 		reset_();
 	}
 	return	buf;
