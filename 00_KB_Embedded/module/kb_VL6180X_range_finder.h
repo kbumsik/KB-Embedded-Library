@@ -12,11 +12,11 @@
 #include "kb_module_config.h"
 
 #ifndef VL6180X_I2C
-	#define VL6180X_I2C			I2C1
-	#define VL6180X_SDA_PORT	GPIOB
-	#define VL6180X_SDA_PIN		GPIO_PIN_9
-	#define VL6180X_SCL_PORT	GPIOB
-	#define VL6180X_SCL_PIN		GPIO_PIN_8
+    #define VL6180X_I2C			I2C1
+    #define VL6180X_SDA_PORT	GPIOB
+    #define VL6180X_SDA_PIN		GPIO_PIN_9
+    #define VL6180X_SCL_PORT	GPIOB
+    #define VL6180X_SCL_PIN		GPIO_PIN_8
 #endif
 
 #ifdef __cplusplus

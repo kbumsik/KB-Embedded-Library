@@ -3,3 +3,4 @@ RemoteSystemsTempFiles
 .metadata
 dummy_workspaces
 **/Debug
+source_insight

@@ -16,7 +16,7 @@
 #if defined(STM32)
     typedef void* kb_uart_t;
 #else
-	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
+    #error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif
 
 #ifdef __cplusplus

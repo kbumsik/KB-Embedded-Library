@@ -9,7 +9,7 @@
 #define _MODULE_HCMS_290X_DISPLAY_H_
 
 /* Includes */
-#include <kb_common_source.h>
+#include "kb_common_header.h"
 #include "kb_module_config.h"
 
 /*
@@ -22,17 +22,17 @@
  * DIS_SCK
  */
 #ifndef HCMS_290X_SPI
-	#define HCMS_290X_SPI			SPI2
-	#define HCMS_290X_RS_PORT		GPIOC
-	#define HCMS_290X_RS_PIN		GPIO_PIN_4
-	#define HCMS_290X_RESET_PORT 	GPIOC
-	#define HCMS_290X_RESET_PIN		GPIO_PIN_5
-	#define HCMS_290X_CE_PORT		GPIOA
-	#define HCMS_290X_CE_PIN		GPIO_PIN_4
-	#define HCMS_290X_MOSI_PORT 	GPIOC
-	#define HCMS_290X_MOSI_PIN		GPIO_PIN_1
-	#define HCMS_290X_SCK_PORT		GPIOB
-	#define HCMS_290X_SCK_PIN		GPIO_PIN_10
+    #define HCMS_290X_SPI			SPI2
+    #define HCMS_290X_RS_PORT		GPIOC
+    #define HCMS_290X_RS_PIN		GPIO_PIN_4
+    #define HCMS_290X_RESET_PORT 	GPIOC
+    #define HCMS_290X_RESET_PIN		GPIO_PIN_5
+    #define HCMS_290X_CE_PORT		GPIOA
+    #define HCMS_290X_CE_PIN		GPIO_PIN_4
+    #define HCMS_290X_MOSI_PORT 	GPIOC
+    #define HCMS_290X_MOSI_PIN		GPIO_PIN_1
+    #define HCMS_290X_SCK_PORT		GPIOB
+    #define HCMS_290X_SCK_PIN		GPIO_PIN_10
 #endif
 
 #ifdef __cplusplus

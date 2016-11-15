@@ -14,19 +14,19 @@
 #if defined(STM32)
     typedef void* kb_spi_t;
 #else
-	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
+    #error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif
 
 typedef enum{
-	LEADING_RISING_EDGE = 0x01,
-	LEADING_FALLING_EDGE = 0x02,
-	TRAILING_RISING_EDGE = 0x03,
-	TRAILING_FALLING_EDGE = 0x04,
+    LEADING_RISING_EDGE = 0x01,
+    LEADING_FALLING_EDGE = 0x02,
+    TRAILING_RISING_EDGE = 0x03,
+    TRAILING_FALLING_EDGE = 0x04,
 }kb_spi_polarity_t;
 
 typedef struct{
-	uint32_t	frequency;
-	kb_spi_polarity_t polarity;
+    uint32_t	frequency;
+    kb_spi_polarity_t polarity;
 }kb_spi_init_t;
 
 #ifdef __cplusplus

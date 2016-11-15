@@ -15,11 +15,11 @@
 #if defined(STM32)
 #else
     typedef void* kb_i2c_t;
-	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
+    #error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif
 
 typedef struct{
-	uint32_t	frequency;
+    uint32_t	frequency;
 }kb_i2c_init_t;
 
 #ifdef __cplusplus

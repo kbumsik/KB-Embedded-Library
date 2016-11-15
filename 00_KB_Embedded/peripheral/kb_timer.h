@@ -14,41 +14,41 @@
 
 #if defined(STM32)
     typedef enum{
-		TIMER1,
-		TIMER2,
-		TIMER3,
-		TIMER4,
-		TIMER5,
-		TIMER6,
-		TIMER7,
-		TIMER8,
-		TIMER9,
-		TIMER10,
-		TIMER11,
-		TIMER12,
-		TIMER13,
-		TIMER14
-	}kb_timer_t;
-	typedef enum{
-		CH_1 = 0x01U,
-		CH_2 = 0x02U,
-		CH_3 = 0x03U,
-		CH_4 = 0x04U,
-	}kb_timer_ch_t;
-	typedef enum{
-		CW,
-		CCW
-	}kb_encoder_dir_t;
-	typedef struct{
-		uint32_t	clock_frequency;
-		uint16_t	period;
-	}kb_pwm_init_t;
-	typedef struct{
-		kb_encoder_dir_t direction;
-		uint16_t	prescaler;
-	}kb_encoder_init_t;
+        TIMER1,
+        TIMER2,
+        TIMER3,
+        TIMER4,
+        TIMER5,
+        TIMER6,
+        TIMER7,
+        TIMER8,
+        TIMER9,
+        TIMER10,
+        TIMER11,
+        TIMER12,
+        TIMER13,
+        TIMER14
+    }kb_timer_t;
+    typedef enum{
+        CH_1 = 0x01U,
+        CH_2 = 0x02U,
+        CH_3 = 0x03U,
+        CH_4 = 0x04U,
+    }kb_timer_ch_t;
+    typedef enum{
+        CW,
+        CCW
+    }kb_encoder_dir_t;
+    typedef struct{
+        uint32_t	clock_frequency;
+        uint16_t	period;
+    }kb_pwm_init_t;
+    typedef struct{
+        kb_encoder_dir_t direction;
+        uint16_t	prescaler;
+    }kb_encoder_init_t;
 #else
-	#error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
+    #error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif
 
 

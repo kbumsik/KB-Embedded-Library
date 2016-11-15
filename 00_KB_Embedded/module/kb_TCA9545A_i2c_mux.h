@@ -9,17 +9,17 @@
 #define MODULE_KB_TCA9545A_I2C_MUX_H_
 
 
-#include <kb_common_source.h>
+#include "kb_common_header.h"
 #include "kb_module_config.h"
 
 #ifndef TCA9545A_I2C
-	#define TCA9545A_I2C		I2C1
-	#define TCA9545A_SDA_PORT	GPIOB
-	#define TCA9545A_SDA_PIN	GPIO_PIN_9
-	#define TCA9545A_SCL_PORT	GPIOB
-	#define TCA9545A_SCL_PIN	GPIO_PIN_8
-	#define TCA9545A_RESET_PORT	GPIOC
-	#define TCA9545A_RESET_PIN	GPIO_PIN_13
+    #define TCA9545A_I2C		I2C1
+    #define TCA9545A_SDA_PORT	GPIOB
+    #define TCA9545A_SDA_PIN	GPIO_PIN_9
+    #define TCA9545A_SCL_PORT	GPIOB
+    #define TCA9545A_SCL_PIN	GPIO_PIN_8
+    #define TCA9545A_RESET_PORT	GPIOC
+    #define TCA9545A_RESET_PIN	GPIO_PIN_13
 #endif
 
 #define TCA9545A_CH_0	0x01U

@@ -14,8 +14,8 @@
 
 // base name change. Used with kb_msg(). See @kb_base.h
 #ifdef KB_MSG_BASE
-	#undef KB_MSG_BASE
-	#define KB_MSG_BASE "VL6180X"
+    #undef KB_MSG_BASE
+    #define KB_MSG_BASE "VL6180X"
 #endif
 
 static const VL6180xDev_t dev_addr_ = 0x29;
@@ -23,15 +23,15 @@ static const VL6180xDev_t dev_addr_ = 0x29;
 
 inline static void init_device_variable_(VL6180xDev_t dev)	//MyDev_Init(myDev);
 {
-	return;	// not used becasue we use single driver now
+    return;	// not used becasue we use single driver now
 }
 inline static void sleep_us_(uint32_t time) //MyDev_uSleep(1000);
 {
-	kb_delay_us(time);
+    kb_delay_us(time);
 }
 inline static void chip_enable_(VL6180xDev_t dev) //MyDev_SetChipEnable(myDev);
 {
-	return;	// not used because CE pin is not used
+    return;	// not used because CE pin is not used
 }
 
 
@@ -51,17 +51,17 @@ int VL6180x_I2CWrite(VL6180xDev_t addr, uint8_t *buff, uint8_t len) {
 
 int  vl6180x_init(void)
 {
-	kb_i2c_sda_pin(VL6180X_I2C, VL6180X_SDA_PORT, VL6180X_SDA_PIN, PULLUP);
-	kb_i2c_scl_pin(VL6180X_I2C, VL6180X_SCL_PORT, VL6180X_SCL_PIN, PULLUP);
+    kb_i2c_sda_pin(VL6180X_I2C, VL6180X_SDA_PORT, VL6180X_SDA_PIN, PULLUP);
+    kb_i2c_scl_pin(VL6180X_I2C, VL6180X_SCL_PORT, VL6180X_SCL_PIN, PULLUP);
 
-	kb_i2c_init_t i2c_setting = {
-			.frequency = 400000
-	};
-	kb_status_t result = kb_i2c_init(VL6180X_I2C, &i2c_setting);
-	if (result != KB_OK)
-	{
-		return result;
-	}
+    kb_i2c_init_t i2c_setting = {
+            .frequency = 400000
+    };
+    kb_status_t result = kb_i2c_init(VL6180X_I2C, &i2c_setting);
+    if (result != KB_OK)
+    {
+        return result;
+    }
 
     //MyDev_Init(myDev);           // your code init device variable
     init_device_variable_(dev_addr_);
@@ -88,7 +88,7 @@ int32_t  vl6180x_range_mm(void)
     }
     else
     {
-    	KB_DEBUG_MSG("Range error msg:%lu", Range.errorStatus);
+        KB_DEBUG_MSG("Range error msg:%lu", Range.errorStatus);
     }
     return Range.range_mm;
 }
@@ -100,11 +100,11 @@ uint32_t vl6180x_als_lux(void)
     VL6180x_AlsPollMeasurement(dev_addr_, &Als);
     if (Als.errorStatus == 0 )
     {
-    	// Do something?
+        // Do something?
     }
     else
     {
-    	KB_DEBUG_MSG("ALS error msg:%lu", Als.errorStatus);
+        KB_DEBUG_MSG("ALS error msg:%lu", Als.errorStatus);
     }
     return Als.lux;
 }
@@ -133,11 +133,11 @@ int32_t  vl6180x_freerun_range_mm(void)
             /* we have the new measure that was ready */
             if (Range.errorStatus == 0 )
             {
-            	// Do something?
+                // Do something?
             }
             else
             {
-            	KB_DEBUG_MSG("Range error msg:%lu", Range.errorStatus);
+                KB_DEBUG_MSG("Range error msg:%lu", Range.errorStatus);
             }
             /* re-arm next measurement */
             VL6180x_RangeStartSingleShot(dev_addr_);
@@ -145,7 +145,7 @@ int32_t  vl6180x_freerun_range_mm(void)
             // Then return
             if(WaitedLoop > 0)
             {
-            	KB_DEBUG_MSG("%d loops waited", WaitedLoop);
+                KB_DEBUG_MSG("%d loops waited", WaitedLoop);
             }
             WaitedLoop=0;
             return Range.range_mm;
@@ -157,8 +157,8 @@ int32_t  vl6180x_freerun_range_mm(void)
         }
         else if( status <0 )
         {
-        	KB_DEBUG_ERROR("Critical Error:%d", status);
-        	return 0;
+            KB_DEBUG_ERROR("Critical Error:%d", status);
+            return 0;
         }
     } while (1); // your code to stop looping
 }
