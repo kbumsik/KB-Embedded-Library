@@ -374,6 +374,9 @@ int32_t kb_encoder_count(kb_timer_t timer)
     return handler->Instance->CNT;
 }
 
+/******************************************************************************
+ * Private Functions
+ ******************************************************************************/
 
 static uint32_t get_bus_freq_(kb_timer_t timer)
 {

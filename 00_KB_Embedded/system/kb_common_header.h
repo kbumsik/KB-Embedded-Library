@@ -9,6 +9,7 @@
 #define SYSTEM_KB_COMMON_HEADER_H_
 
 #include "kb_config.h"
+#include <stdint.h>
 
 // base library setting
 #if defined(USE_HAL_DRIVER)

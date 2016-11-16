@@ -70,6 +70,7 @@ void kb_gpio_toggle(kb_gpio_port_t port, kb_gpio_pin_t pin);
 
 int kb_gpio_isr_enable(kb_gpio_port_t port, kb_gpio_pin_t pin,
         kb_gpio_edge_t edge, void (*callback)(void));
+void kb_gpio_enable_clk(kb_gpio_port_t port);
 
 #ifdef __cplusplus
 }

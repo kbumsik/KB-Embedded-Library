@@ -150,6 +150,9 @@ int kb_i2c_receive_timeout(kb_i2c_t i2c, uint16_t address_target, uint8_t* buf, 
     return  status;
 }
 
+/******************************************************************************
+ * Private Functions
+ ******************************************************************************/
 
 static I2C_HandleTypeDef *get_handler (kb_i2c_t i2c)
 {

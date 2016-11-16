@@ -16,7 +16,6 @@
 
 // base library setting
 #ifdef  STM32F4
-    #undef  STM32F4 // will be redefined in "stm32f4xx"
     #include "stm32f4xx.h"
     #include "stm32f4xx_hal_def.h" // TODO: port this to our library
 

@@ -8,7 +8,7 @@
 #ifndef KB_TICK_H_
 #define KB_TICK_H_
 
-#include <kb_common_source.h>
+#include "kb_common_header.h"
 
 #ifdef __cplusplus
 extern "C" {

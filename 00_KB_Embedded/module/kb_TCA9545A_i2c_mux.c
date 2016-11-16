@@ -93,6 +93,10 @@ uint8_t tca9545a_clear_it(uint8_t ch)
 }
 
 
+/******************************************************************************
+ * Private Functions
+ ******************************************************************************/
+
 static inline void reset_(void)
 {
 	kb_gpio_set(TCA9545A_RESET_PORT, TCA9545A_RESET_PIN, GPIO_PIN_RESET);

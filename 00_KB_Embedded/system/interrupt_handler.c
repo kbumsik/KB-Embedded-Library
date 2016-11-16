@@ -7,8 +7,8 @@
 
 
 #include "kb_tick.h"
+#include "kb_common_source.h"
 #include "interrupt_handler.h"
-#include "stm32f4xx_hal.h"
 #include "faults.h"
 
 #if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)

@@ -31,7 +31,7 @@ void system_init(void)
 	  HAL_Init();
 
 	  // Set NVIC
-	  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_0);
+	  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
 	  /* System interrupt init*/
 	  /* MemoryManagement_IRQn interrupt configuration */
@@ -70,7 +70,6 @@ void system_init(void)
 */
 void SystemClock_Config(void)
 {
-
 	  RCC_OscInitTypeDef RCC_OscInitStruct;
 	  RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
@@ -125,9 +124,6 @@ void SystemClock_Config(void)
 	    /**Configure the Systick
 	    */
 	  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-
-	  /* SysTick_IRQn interrupt configuration */
-	  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
 

@@ -13,8 +13,8 @@
 
 
 #if defined(STM32)
-#else
     typedef void* kb_i2c_t;
+#else
     #error "Please define device driver! " __FILE__ "(e.g. USE_HAL_DRIVER)\n"
 #endif
 

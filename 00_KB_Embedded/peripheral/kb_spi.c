@@ -273,6 +273,9 @@ int kb_spi_sendreceive_timeout(kb_spi_t spi, uint8_t *tx_buf, uint8_t *rx_buf, u
     return status;
 }
 
+/******************************************************************************
+ * Private Functions
+ ******************************************************************************/
 
 static uint32_t get_bus_freq_(kb_spi_t spi)
 {
