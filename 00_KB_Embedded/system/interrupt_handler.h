@@ -20,8 +20,6 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void SysTick_Handler(void);
-
 /* Exception Handler */
 
 #if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
