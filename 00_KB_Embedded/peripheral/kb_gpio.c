@@ -14,6 +14,9 @@
     #define KB_MSG_BASE "GPIO"
 #endif
 
+void * _get_port(kb_gpio_pin_t pin);
+uint16_t _get_pin(kb_gpio_pin_t pin);
+
 static int register_callback_(kb_gpio_pin_t pin, void (*callback)(void));
 static int set_isr_(kb_gpio_pin_t pin, uint8_t enable);
 static void (*callback_list_[])(void);
@@ -479,4 +482,23 @@ void EXTI15_10_IRQHandler(void)
             callback_list_[15]();
         }
     }
+}
+
+
+void * _get_port(kb_gpio_pin_t pin)
+{
+    static const void * port_table[] = {
+        GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH
+    }
+    return port_table[pin >> 4];
+}
+
+uint16_t _get_pin(kb_gpio_pin_t pin)
+{
+    static const uint16_t pin_table[] = {
+        GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, 
+        GPIO_PIN_6, GPIO_PIN_7, GPIO_PIN_8, GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11, 
+        GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15
+    }
+    return pin_table[pin % 16];
 }
