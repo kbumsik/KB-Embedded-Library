@@ -68,9 +68,13 @@ kb_gpio_state_t kb_gpio_read(kb_gpio_port_t port, kb_gpio_pin_t pin);
 void kb_gpio_set(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_state_t state);
 void kb_gpio_toggle(kb_gpio_port_t port, kb_gpio_pin_t pin);
 
-int kb_gpio_isr_enable(kb_gpio_port_t port, kb_gpio_pin_t pin,
-        kb_gpio_edge_t edge, void (*callback)(void));
 void kb_gpio_enable_clk(kb_gpio_port_t port);
+
+int kb_gpio_isr_register(kb_gpio_port_t port, kb_gpio_pin_t pin, void (*callback)(void));
+int kb_gpio_isr_deregister(kb_gpio_port_t port, kb_gpio_pin_t pin);
+int kb_gpio_isr_enable(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init, kb_gpio_edge_t edge);
+int kb_gpio_isr_disable(kb_gpio_port_t port, kb_gpio_pin_t pin);
+
 
 #ifdef __cplusplus
 }

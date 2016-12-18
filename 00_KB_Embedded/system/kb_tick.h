@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 #ifndef STM32
+    /* Generic timer functions */
 	void 		kb_tick_update_f_cpu_mhz(void);
 	void 		kb_tick_init(void);
 	void 		kb_tick_inc_ms(void);
@@ -23,7 +24,8 @@ extern "C" {
 	uint32_t 	kb_tick_us(void);
 	void 		kb_delay_us(volatile uint32_t delay_us);
 #else
-#include "stm32f4xx_hal.h"
+	/* Timer for STM32F4 */
+    #include "stm32f4xx_hal.h"
 	void 	 kb_tick_update_f_cpu_mhz(void);
 	#define	 kb_tick_init()
 	#define  kb_tick_inc_ms()       HAL_IncTick()
@@ -32,8 +34,6 @@ extern "C" {
 	uint32_t kb_tick_us(void);
 	void     kb_delay_us(volatile uint32_t delay_us);
 #endif
-
-
 
 #ifdef __cplusplus
 }

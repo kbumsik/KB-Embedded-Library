@@ -112,11 +112,11 @@ int kb_spi_init(kb_spi_t spi, kb_spi_init_t *settings)
     {
     case LEADING_RISING_EDGE:
         handler->Init.CLKPhase = SPI_PHASE_1EDGE;
-        handler->Init.CLKPolarity = SPI_POLARITY_HIGH;
+        handler->Init.CLKPolarity = SPI_POLARITY_LOW;
         break;
     case LEADING_FALLING_EDGE:
         handler->Init.CLKPhase = SPI_PHASE_1EDGE;
-        handler->Init.CLKPolarity = SPI_POLARITY_LOW;
+        handler->Init.CLKPolarity = SPI_POLARITY_HIGH;
         break;
     case TRAILING_RISING_EDGE:
         handler->Init.CLKPhase = SPI_PHASE_2EDGE;

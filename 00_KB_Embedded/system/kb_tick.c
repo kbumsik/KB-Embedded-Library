@@ -58,11 +58,14 @@ void kb_timer_delay_ms(volatile uint32_t delay_ms)
 }
 #else
 
-/**
- * Added overflow protection on top of the original code.
+/*
+ * Overloading original HAL_Delay() in stm32f4xx_hal.c
  */
 void HAL_Delay(__IO uint32_t Delay)
 {
+    /**
+     * Added overflow protection on top of the original code.
+     */
 	uint32_t tickstart = 0U;
 	tickstart = HAL_GetTick();
 	uint32_t current = tickstart;

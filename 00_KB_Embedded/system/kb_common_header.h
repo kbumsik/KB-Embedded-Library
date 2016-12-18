@@ -11,6 +11,8 @@
 #include "kb_config.h"
 #include <stdint.h>
 
+#define KB_LIBRARY
+
 // base library setting
 #if defined(USE_HAL_DRIVER)
     #if defined(STM32F446xx) || defined(STM32F407xx)

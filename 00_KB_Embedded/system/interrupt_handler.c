@@ -5,10 +5,9 @@
  *      Author: Bumsik Kim
  */
 
-
-#include "kb_tick.h"
 #include "kb_common_source.h"
 #include "interrupt_handler.h"
+#include "kb_tick.h"
 #include "faults.h"
 
 #ifndef KB_USE_FREERTOS // Learn how to combine this with FreeRTOS
@@ -17,10 +16,8 @@
 
 void DebugMon_Handler (void)
 {
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }
@@ -29,20 +26,16 @@ void DebugMon_Handler (void)
 
 void PendSV_Handler (void)
 {
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }
 
 void SVC_Handler (void)
 {
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }

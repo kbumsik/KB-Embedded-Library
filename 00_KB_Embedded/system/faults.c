@@ -36,10 +36,8 @@ void enable_faults(void)
 
 void NMI_Handler (void)
 {
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }
@@ -353,10 +351,7 @@ void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
   trace_printf ("[HardFault]\n");
   dumpExceptionStack (frame, cfsr, mmfar, bfar, lr);
 #endif // defined(TRACE)
-
-#if defined(DEBUG)
   __DEBUG_BKPT();
-#endif
   while (1)
     {
     }
@@ -406,11 +401,8 @@ void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
   trace_printf ("[HardFault]\n");
   dumpExceptionStack (frame, lr);
 #endif // defined(TRACE)
-
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }
@@ -422,10 +414,8 @@ void HardFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
 
 void MemManage_Handler (void)
 {
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }
@@ -458,11 +448,8 @@ void BusFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
   trace_printf ("[BusFault]\n");
   dumpExceptionStack (frame, cfsr, mmfar, bfar, lr);
 #endif // defined(TRACE)
-
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }
@@ -510,11 +497,8 @@ void UsageFault_Handler_C (ExceptionStackFrame* frame __attribute__((unused)),
   trace_printf ("[UsageFault]\n");
   dumpExceptionStack (frame, cfsr, mmfar, bfar, lr);
 #endif // defined(TRACE)
-
-#if defined(KB_DEBUG)
-  __DEBUG_BKPT();
-#endif
-  while (1)
+    __DEBUG_BKPT();
+    while (1)
     {
     }
 }

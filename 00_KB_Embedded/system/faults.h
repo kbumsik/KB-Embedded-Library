@@ -8,11 +8,13 @@
 #ifndef FAULTS_H_
 #define FAULTS_H_
 
-#include <kb_common_source.h>
+#include "kb_common_source.h"
 #include <stdint.h>
 
 #if defined(KB_DEBUG)
-#define __DEBUG_BKPT()  __BKPT(0)
+    #define __DEBUG_BKPT()  __BKPT(0)
+#else
+    #define __DEBUG_BKPT()
 #endif
 
 // ----------------------------------------------------------------------------

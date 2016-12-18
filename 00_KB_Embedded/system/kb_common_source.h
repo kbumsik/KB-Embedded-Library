@@ -11,7 +11,6 @@
 #include "kb_config.h"
 #include "kb_common_header.h"
 
-#define KB_LIBRARY
 #define KB_MSG_BASE "KB_SOMEWHERE"
 
 // base library setting
