@@ -18,7 +18,8 @@
         },
         {
             "name": "Win32",
-            "includePath": ["C:/Develop/MinGW/include"],
+            "includePath": ["C:/Develop/MinGW/include",
+                "C:/Dropbox/Projects/KB-Embedded-Library/00_KB_Embedded/module"],
             "browse" : {
                 "limitSymbolsToIncludedHeaders" : true,
                 "databaseFilename" : ""

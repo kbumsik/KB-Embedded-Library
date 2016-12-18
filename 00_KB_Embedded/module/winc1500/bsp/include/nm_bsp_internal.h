@@ -45,6 +45,8 @@
 #ifndef _NM_BSP_INTERNAL_H_
 #define _NM_BSP_INTERNAL_H_
 
+#include "../../conf_winc.h" // TODO Is this necessary?
+
 #ifdef WIN32
 #include "nm_bsp_win32.h"
 #endif
@@ -118,5 +120,8 @@
 #include "bsp\include\nm_bsp_mega.h"
 #endif
 
+#if defined(KB_LIBRARY)
+#include "nm_bsp_kb_lib.h"
+#endif
 
 #endif //_NM_BSP_INTERNAL_H_

@@ -82,7 +82,7 @@
  *
  * See http://www.freertos.org/a00110.html.
  *----------------------------------------------------------*/
-#include "kb_common_source.h"   // TODO: Really needded?
+#include "kb_common_source.h"
 #ifndef KB_USE_FREERTOS
     #error "Please define KB_USE_FREERTOS in kb_config.h to use FreeRTOS with kb_lib!!"
 #endif

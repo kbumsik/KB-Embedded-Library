@@ -8,9 +8,9 @@
 //  #error "Select one of Network device above!!" #__FILE__ #__LINE__
 //#endif
 
-#include <kb_common.h>
+#include "kb_common_header.h"
 /** Debug Options */
-#if defined(KB_LIBRARY)
+#if defined(KB_LIBRARY) // TODO: Delete this line..
 	#ifdef KB_MSG_BASE
 		#undef KB_MSG_BASE
 		#define KB_MSG_BASE "WINC1500"
