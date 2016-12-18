@@ -12,8 +12,6 @@
 
 #if defined(STM32)
     // typedefs
-    /* TODO: Think of a good design for GPIO */
-    typedef void*   kb_gpio_port_t;
     typedef uint16_t    kb_gpio_pin_t;
     typedef GPIO_InitTypeDef 	kb_gpio_init_t;
     typedef GPIO_PinState 		kb_gpio_state_t;
@@ -22,7 +20,7 @@
         RISING_EDGE,
         FALLING_EDGE,
         BOTH_EDGE
-    }kb_gpio_edge_t;
+    } kb_gpio_edge_t;
     // Pull state
     #define NOPULL		GPIO_NOPULL
     #define PULLUP		GPIO_PULLUP
@@ -37,7 +35,7 @@
         PF_0, PF_1, PF_2, PF_3, PF_4, PF_5, PF_6, PF_7, PF_8, PF_9, PF_10, PF_11, PF_12, PF_13, PF_14, PF_15,
         PG_0, PG_1, PG_2, PG_3, PG_4, PG_5, PG_6, PG_7, PG_8, PG_9, PG_10, PG_11, PG_12, PG_13, PG_14, PG_15,
         PH_0, PH_1, PH_2, PH_3, PH_4, PH_5, PH_6, PH_7, PH_8, PH_9, PH_10, PH_11, PH_12, PH_13, PH_14, PH_15
-    }kb_gpio_pin_t;
+    } kb_gpio_pin_t;
 #else
     #error "Please define device driver (e.g. USE_HAL_DRIVER)\n"
 #endif
@@ -47,18 +45,17 @@
 extern "C"{
 #endif
 
-void kb_gpio_init(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init);
-kb_gpio_state_t kb_gpio_read(kb_gpio_port_t port, kb_gpio_pin_t pin);
-void kb_gpio_set(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_state_t state);
-void kb_gpio_toggle(kb_gpio_port_t port, kb_gpio_pin_t pin);
+void kb_gpio_init (kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init);
+kb_gpio_state_t kb_gpio_read (kb_gpio_pin_t pin);
+void kb_gpio_set (kb_gpio_pin_t pin, kb_gpio_state_t state);
+void kb_gpio_toggle (kb_gpio_pin_t pin);
 
-void kb_gpio_enable_clk(kb_gpio_port_t port);
+void kb_gpio_enable_clk (kb_gpio_pin_t pin);
 
-int kb_gpio_isr_register(kb_gpio_port_t port, kb_gpio_pin_t pin, void (*callback)(void));
-int kb_gpio_isr_deregister(kb_gpio_port_t port, kb_gpio_pin_t pin);
-int kb_gpio_isr_enable(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init, kb_gpio_edge_t edge);
-int kb_gpio_isr_disable(kb_gpio_port_t port, kb_gpio_pin_t pin);
-
+int kb_gpio_isr_register (kb_gpio_pin_t pin, void (*callback)(void));
+int kb_gpio_isr_deregister (kb_gpio_pin_t pin);
+int kb_gpio_isr_enable (kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init, kb_gpio_edge_t edge);
+int kb_gpio_isr_disable (kb_gpio_pin_t pin);
 
 #ifdef __cplusplus
 }
