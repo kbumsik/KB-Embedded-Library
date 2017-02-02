@@ -5,3 +5,4 @@ dummy_workspaces
 **/Debug
 source_insight
 99_Single_Test
+.vagrant
