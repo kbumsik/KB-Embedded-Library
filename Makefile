@@ -1,9 +1,10 @@
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 .PHONY: truestudio eclipse
 
 eclipse:
-	./scripts/eclipse.sh
+	$(ROOT_DIR)/scripts/eclipse.sh
 
 truestudio:
-	./scripts/truestudio.sh
+	$(ROOT_DIR)/scripts/truestudio.sh
 
