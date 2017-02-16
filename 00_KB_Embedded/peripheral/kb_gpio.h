@@ -8,23 +8,40 @@
 #ifndef PERIPHERAL_KB_GPIO_H_
 #define PERIPHERAL_KB_GPIO_H_
 
-#include "kb_common_source.h"
+#include "kb_common_header.h"
+
+// typedefs
+typedef enum {
+    LOW = 0x00U,
+    HIGH = 0x01U
+} kb_gpio_state_t;
+
+typedef enum {
+    NO_PULL      = 0x01U,
+    PULL_UP      = 0x02U,
+    PULL_DOWN    = 0x03U
+} kb_gpio_pull_t;
+
+typedef enum {
+    INPUT       = 0x01U,
+    PUSH_PULL   = 0x02U,
+    OPEN_DRAIN  = 0x03U,
+    ANALOG      = 0x04U                
+} kb_gpio_mode_t;
+
+typedef enum {
+    RISING_EDGE     = 0x01U,
+    FALLING_EDGE    = 0x02U,
+    BOTH_EDGE       = 0x03U
+} kb_gpio_trigger_t;
+
+typedef struct {
+    kb_gpio_state_t mode;
+    kb_gpio_pull_t pull;
+    kb_gpio_trigger_t trigger;
+} kb_gpio_init_t;
 
 #if defined(STM32)
-    // typedefs
-    typedef uint16_t    kb_gpio_pin_t;
-    typedef GPIO_InitTypeDef 	kb_gpio_init_t;
-    typedef GPIO_PinState 		kb_gpio_state_t;
-    typedef	uint32_t			kb_gpio_pull_t;
-    typedef enum {
-        RISING_EDGE,
-        FALLING_EDGE,
-        BOTH_EDGE
-    } kb_gpio_edge_t;
-    // Pull state
-    #define NOPULL		GPIO_NOPULL
-    #define PULLUP		GPIO_PULLUP
-    #define PULLDOWN	GPIO_PULLDOWN
     // Pin enums
     typedef enum {
         PA_0 = 0x00U, PA_1, PA_2, PA_3, PA_4, PA_5, PA_6, PA_7, PA_8, PA_9, PA_10, PA_11, PA_12, PA_13, PA_14, PA_15,
@@ -47,14 +64,14 @@ extern "C"{
 
 void kb_gpio_init (kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init);
 kb_gpio_state_t kb_gpio_read (kb_gpio_pin_t pin);
-void kb_gpio_set (kb_gpio_pin_t pin, kb_gpio_state_t state);
+void kb_gpio_write (kb_gpio_pin_t pin, kb_gpio_state_t state);
 void kb_gpio_toggle (kb_gpio_pin_t pin);
 
 void kb_gpio_enable_clk (kb_gpio_pin_t pin);
 
 int kb_gpio_isr_register (kb_gpio_pin_t pin, void (*callback)(void));
 int kb_gpio_isr_deregister (kb_gpio_pin_t pin);
-int kb_gpio_isr_enable (kb_gpio_pin_t pin, kb_gpio_init_t *gpio_init, kb_gpio_edge_t edge);
+int kb_gpio_isr_enable (kb_gpio_pin_t pin, kb_gpio_edge_t edge);
 int kb_gpio_isr_disable (kb_gpio_pin_t pin);
 
 #ifdef __cplusplus
