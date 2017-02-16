@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>01_Blinky</name>
+	<name>blinky</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -20,55 +20,45 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
-		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
 	</natures>
 	<linkedResources>
 		<link>
-			<name>HAL_Driver</name>
+			<name>FreeRTOS</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_Manufacturer_Diver/STM32F4xx_HAL_Driver/Src</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/src/FreeRTOS</locationURI>
 		</link>
 		<link>
-			<name>inc</name>
+			<name>bsp</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/inc</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/src/bsp</locationURI>
 		</link>
 		<link>
-			<name>kb-bsp</name>
+			<name>manufacturer_drivers</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_KB_Embedded/bsp</locationURI>
+			<locationURI>$%7BPARENT-3-PROJECT_LOC%7D/src/manufacturer_drivers</locationURI>
 		</link>
 		<link>
-			<name>kb-module</name>
+			<name>module</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_KB_Embedded/module</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/src/module</locationURI>
 		</link>
 		<link>
-			<name>kb-peri</name>
+			<name>peripheral</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_KB_Embedded/peripheral</locationURI>
-		</link>
-		<link>
-			<name>kb-system</name>
-			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_KB_Embedded/system</locationURI>
-		</link>
-		<link>
-			<name>linker_script</name>
-			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_KB_Embedded/linker_script</locationURI>
+			<locationURI>$%7BPARENT-3-PROJECT_LOC%7D/src/peripheral</locationURI>
 		</link>
 		<link>
 			<name>src</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/src</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/src</locationURI>
 		</link>
 		<link>
-			<name>startup</name>
+			<name>system</name>
 			<type>2</type>
-			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/00_Manufacturer_Diver/CMSIS/Device/ST/STM32F4xx/Source/Templates</locationURI>
+			<locationURI>$%7BPARENT-3-PROJECT_LOC%7D/src/system</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
