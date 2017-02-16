@@ -8,3 +8,6 @@ eclipse:
 truestudio:
 	$(ROOT_DIR)/scripts/truestudio.sh
 
+test:
+	$(ROOT_DIR)/scripts/cow.sh
+
