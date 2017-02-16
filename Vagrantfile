@@ -136,9 +136,9 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   
-  config.vm.provision "shell", path: "scripts/install-apps/GNU-ARM-Eclipse.sh"
-  config.vm.provision "shell", path: "scripts/install-apps/RDP-VNC.sh"
-  config.vm.provision "shell", path: "scripts/setup/modify_bashrc.sh"
+  config.vm.provision "shell", path: KB_LIB_BASE + "scripts/install-apps/GNU-ARM-Eclipse.sh"
+  config.vm.provision "shell", path: KB_LIB_BASE + "scripts/install-apps/RDP-VNC.sh"
+  config.vm.provision "shell", path: KB_LIB_BASE + "scripts/setup/modify_bashrc.sh"
   config.vm.provision "shell", inline: "sudo apt-get install -y xfce4-terminal"
   config.vm.provision "shell", inline: "sudo apt-get install -y build-essential"
   config.vm.provision "shell", inline: "sudo apt-get install -y gdb"
