@@ -30,10 +30,10 @@
         TIMER14
     }kb_timer_t;
     typedef enum{
-        CH_1 = 0x01U,
-        CH_2 = 0x02U,
-        CH_3 = 0x03U,
-        CH_4 = 0x04U,
+        CH_1 = TIM_CHANNEL_1, // 0x01U,
+        CH_2 = TIM_CHANNEL_2, // 0x02U,
+        CH_3 = TIM_CHANNEL_3, // 0x03U,
+        CH_4 = TIM_CHANNEL_4  //0x04U,
     }kb_timer_ch_t;
     typedef enum{
         CW,
