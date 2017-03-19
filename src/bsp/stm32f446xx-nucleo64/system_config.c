@@ -143,8 +143,8 @@ void peripheral_init(void)
 	  kb_gpio_init_t GPIO_InitStruct;
 
 	  /*Configure GPIO pin : B1_Pin */
-	  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
-	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	  GPIO_InitStruct.Pull = NOPULL;
 	  kb_gpio_init(B1_PORT, B1_PIN, &GPIO_InitStruct);
 
 	  /*Configure UART */

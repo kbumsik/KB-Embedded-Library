@@ -105,7 +105,7 @@ int kb_gpio_isr_enable(kb_gpio_port_t port, kb_gpio_pin_t pin, kb_gpio_init_t *g
     gpio_setting->Mode = ((edge == RISING_EDGE)?GPIO_MODE_IT_RISING:
             (edge == FALLING_EDGE)?GPIO_MODE_IT_FALLING:
             (edge == BOTH_EDGE)?GPIO_MODE_IT_RISING_FALLING:0);
-    kb_gpio_init(port, pin, &gpio_setting);
+    kb_gpio_init(port, pin, gpio_setting);
 
     return set_isr_(pin, 1);
 }
