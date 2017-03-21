@@ -48,16 +48,16 @@ void SVC_Handler (void)
     extern void xPortSysTickHandler(void);
 #endif
 
+extern void SysTick_hook(void); // Can be found in kb_hooks.c
+
 void SysTick_Handler (void)
 {
-	// DO NOT loop, just return.
-	// Useful in case someone (like STM HAL) inadvertently enables SysTick.
+    SysTick_hook();
 	kb_tick_inc_ms();
 
 #ifdef KB_USE_FREERTOS
 	// FreeRTOS Tick handler
-    if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
-    {
+    if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
         xPortSysTickHandler();
     }
 #endif

@@ -14,16 +14,10 @@
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
-
 /* Exception Handler */
 
 #if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
-	void DebugMon_Handler (void);
+    void DebugMon_Handler (void);
 #endif
 void SVC_Handler(void);
 void PendSV_Handler(void);
