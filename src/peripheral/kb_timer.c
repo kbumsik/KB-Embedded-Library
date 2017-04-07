@@ -153,6 +153,7 @@ int kb_pwm_permyriad(kb_timer_t timer, kb_timer_ch_t channel, uint16_t duty_cycl
     TIM_OC_InitTypeDef config;
     config.OCMode = TIM_OCMODE_PWM1;
     config.OCPolarity = TIM_OCPOLARITY_HIGH;
+    config.OCNPolarity = TIM_OCNPOLARITY_HIGH;
     config.OCFastMode = TIM_OCFAST_DISABLE;
     config.OCIdleState = TIM_OCIDLESTATE_RESET;
     config.OCNIdleState = TIM_OCNIDLESTATE_RESET;
@@ -187,24 +188,7 @@ int kb_pwm_start(kb_timer_t timer, kb_timer_ch_t channel)
     }
 
     int8_t status;
-    switch (channel)
-    {
-    case CH_1:
-        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_1);
-        break;
-    case CH_2:
-        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_2);
-        break;
-    case CH_3:
-        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_3);
-        break;
-    case CH_4:
-        status = HAL_TIM_PWM_Start(handler, TIM_CHANNEL_4);
-        break;
-    default:
-        KB_DEBUG_ERROR("Choose correct channel!\r\n");
-        return KB_ERROR;
-    }
+    status = HAL_TIM_PWM_Start(handler, (uint32_t)channel);
 
     KB_CONVERT_STATUS(status);
     if(KB_OK != status)
@@ -280,15 +264,25 @@ int kb_encoder_init(kb_timer_t timer, kb_encoder_init_t *setting)
         encoder_config.IC1Prescaler = TIM_ICPSC_DIV1;
         encoder_config.IC1Filter = 0xf;
     
-        encoder_config.IC2Polarity = TIM_ICPOLARITY_FALLING; //TIM_ICPOLARITY_RISING;
+        encoder_config.IC2Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
         encoder_config.IC2Selection = TIM_ICSELECTION_DIRECTTI;
         encoder_config.IC2Prescaler = TIM_ICPSC_DIV1;
         encoder_config.IC2Filter = 0xf;
         break;
     case CCW:
-        handler->Init.CounterMode = TIM_COUNTERMODE_DOWN;
-
+        handler->Init.CounterMode = TIM_COUNTERMODE_UP;
+        #if defined(KB_BLACKWOLF)
         encoder_config.IC1Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
+        encoder_config.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+        encoder_config.IC1Prescaler = TIM_ICPSC_DIV1;
+        encoder_config.IC1Filter = 0xf;
+    
+        encoder_config.IC2Polarity = TIM_ICPOLARITY_FALLING; //TIM_ICPOLARITY_RISING;
+        encoder_config.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+        encoder_config.IC2Prescaler = TIM_ICPSC_DIV1;
+        encoder_config.IC2Filter = 0xf;
+        #else
+        encoder_config.IC1Polarity = TIM_ICPOLARITY_FALLING; //TIM_ICPOLARITY_RISING;
         encoder_config.IC1Selection = TIM_ICSELECTION_DIRECTTI;
         encoder_config.IC1Prescaler = TIM_ICPSC_DIV1;
         encoder_config.IC1Filter = 0xf;
@@ -297,6 +291,7 @@ int kb_encoder_init(kb_timer_t timer, kb_encoder_init_t *setting)
         encoder_config.IC2Selection = TIM_ICSELECTION_DIRECTTI;
         encoder_config.IC2Prescaler = TIM_ICPSC_DIV1;
         encoder_config.IC2Filter = 0xf;
+        #endif
         break;
     default:
         KB_DEBUG_ERROR("Incorrect encoder direction");

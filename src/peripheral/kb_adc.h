@@ -8,6 +8,7 @@
 #ifndef PERIPHERAL_KB_ADC_H_
 #define PERIPHERAL_KB_ADC_H_
 
+#include "kb_common_header.h"
 #include "kb_gpio.h"
 
 /*******************************************************************************

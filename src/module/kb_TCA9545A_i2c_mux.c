@@ -27,8 +27,8 @@ static uint8_t read_(void);
 int tca9545a_init(void)
 {
 	// SDA, SCL pin
-    kb_i2c_sda_pin(TCA9545A_I2C, TCA9545A_SDA_PORT, TCA9545A_SDA_PIN, PULLUP);
-    kb_i2c_scl_pin(TCA9545A_I2C, TCA9545A_SCL_PORT, TCA9545A_SCL_PIN, PULLUP);
+    kb_i2c_sda_pin(TCA9545A_I2C, TCA9545A_SDA_PORT, TCA9545A_SDA_PIN, NOPULL);
+    kb_i2c_scl_pin(TCA9545A_I2C, TCA9545A_SCL_PORT, TCA9545A_SCL_PIN, NOPULL);
 
     // Reset pin
 	kb_gpio_init_t reset_pin_settings;
