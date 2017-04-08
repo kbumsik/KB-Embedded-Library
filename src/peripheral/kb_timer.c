@@ -272,12 +272,12 @@ int kb_encoder_init(kb_timer_t timer, kb_encoder_init_t *setting)
     case CCW:
         handler->Init.CounterMode = TIM_COUNTERMODE_UP;
         #if defined(KB_BLACKWOLF)
-        encoder_config.IC1Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
+        encoder_config.IC1Polarity = TIM_ICPOLARITY_FALLING; //TIM_ICPOLARITY_RISING;
         encoder_config.IC1Selection = TIM_ICSELECTION_DIRECTTI;
         encoder_config.IC1Prescaler = TIM_ICPSC_DIV1;
         encoder_config.IC1Filter = 0xf;
     
-        encoder_config.IC2Polarity = TIM_ICPOLARITY_FALLING; //TIM_ICPOLARITY_RISING;
+        encoder_config.IC2Polarity = TIM_ICPOLARITY_RISING; //TIM_ICPOLARITY_RISING;
         encoder_config.IC2Selection = TIM_ICSELECTION_DIRECTTI;
         encoder_config.IC2Prescaler = TIM_ICPSC_DIV1;
         encoder_config.IC2Filter = 0xf;
